@@ -11,11 +11,25 @@ class Config:
     DB_HOST = os.environ.get('DB_HOST', 'localhost')
     DB_PORT = os.environ.get('DB_PORT', '3306')
     DB_NAME = os.environ.get('DB_NAME')
-    
+
     if DB_USER and DB_PASSWORD and DB_NAME:
-        SQLALCHEMY_DATABASE_URI = f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+        SQLALCHEMY_DATABASE_URI = (
+            f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}"
+            f"@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+        )
+
+        SQLALCHEMY_ENGINE_OPTIONS = {
+            "connect_args": {
+                "ssl": {
+                    "ca": os.path.join(
+                        os.path.dirname(os.path.abspath(__file__)),
+                        "..",
+                        "ca.pem"
+                    )
+                }
+            }
+        }
     else:
-        # Fallback to local SQLite db inside project root for seamless out-of-the-box local runs
         SQLALCHEMY_DATABASE_URI = "sqlite:///dream_career.db"
         
     SQLALCHEMY_TRACK_MODIFICATIONS = False
