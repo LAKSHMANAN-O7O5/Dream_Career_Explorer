@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}ATS Resume Builder - Dream Career Explorer{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Header -->
+    <div class="row mb-4" data-aos="fade-down">
+        <div class="col-12">
+            <div class="glass-card" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, var(--bg-card) 100%);">
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+                    <div>
+                        <span class="badge-custom badge-tech mb-2"><i class="fa-solid fa-file-invoice"></i> Resume Center</span>
+                        <h2 class="fw-bold mb-1">ATS Friendly Resume Builder</h2>
+                        <p class="text-secondary mb-0">Fill out details below. The builder will automatically append your verified Skills and Projects.</p>
+                    </div>
+                    <div>
+                        <a href="{{ url_for('student.resume_preview') }}" target="_blank" class="glow-btn btn-sm"><i class="fa-solid fa-file-pdf"></i> Preview & Print CV</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Resume Parameters Form -->
+    <div class="row">
+        <div class="col-lg-8 mx-auto" data-aos="fade-up">
+            <div class="glass-card">
+                <h5 class="fw-bold mb-4"><i class="fa-solid fa-file-signature text-primary me-2"></i> CV Parameters & Section Configurations</h5>
+                
+                <form action="{{ url_for('student.resume') }}" method="POST">
+                    <!-- Professional Summary -->
+                    <div class="mb-4">
+                        <label class="form-label text-secondary fw-bold" style="font-size: 0.9rem;">Professional Summary</label>
+                        <textarea name="summary" class="form-control-custom" rows="3" placeholder="Describe your career goals, key specialties, and technical background..." required>{{ summary }}</textarea>
+                    </div>
+
+                    <!-- Education -->
+                    <div class="mb-4">
+                        <label class="form-label text-secondary fw-bold" style="font-size: 0.9rem;">Education Details (Markdown/Lines format)</label>
+                        <textarea name="education_history" class="form-control-custom" rows="4" placeholder="Course / Degree Name&#10;College / University, Years&#10;Grade details..." required>{{ education }}</textarea>
+                        <div class="form-text  fw-bold" style="color:dimgrey;">Each separate line represents a point or block on your CV structure.</div>
+                    </div>
+
+                    <!-- Professional Experience -->
+                    <div class="mb-4">
+                        <label class="form-label text-secondary fw-bold" style="font-size: 0.9rem;">Work / Internship Experience (Markdown/Lines format)</label>
+                        <textarea name="experience_history" class="form-control-custom" rows="6" placeholder="Job Title&#10;Company Name, Start - End Date&#10;- Action point 1&#10;- Action point 2..." required>{{ experience }}</textarea>
+                        <div class="form-text fw-bold" style="color:dimgrey;">Use lines starting with dashes (-) to format bullet points.</div>
+                    </div>
+
+                    <div class="p-3 rounded border border-color mb-4" style="background: rgba(255, 255, 255, 0.015);">
+                        <h6 class="fw-bold text-light mb-2"><i class="fa-solid fa-paperclip text-primary me-2"></i> Attached Portfolio Items</h6>
+                        <p class="text-secondary mb-2" style="font-size: 0.85rem;">The builder will automatically load and attach the following elements in a clean column format:</p>
+                        <ul class="text-secondary mb-0" style="font-size: 0.85rem;">
+                            <li><strong>Skills:</strong> {{ skills|length }} items registered.</li>
+                            <li><strong>Projects:</strong> {{ projects|length }} portfolio projects registered.</li>
+                        </ul>
+                    </div>
+
+                    <button type="submit" class="glow-btn px-4 py-3"><i class="fa-solid fa-sync"></i> Save & Compile Resume Parameters</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

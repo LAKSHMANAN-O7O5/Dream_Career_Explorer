@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}Register - Dream Career Explorer{% endblock %}
+
+{% block content %}
+<div class="container d-flex align-items-center justify-content-center" style="min-height: 85vh;">
+    <div class="row w-100 justify-content-center">
+        <div class="col-md-6 col-lg-5" data-aos="zoom-in">
+            <div class="glass-card">
+                <div class="text-center mb-4">
+                    <i class="fa-solid fa-user-plus fs-1 text-primary mb-2"></i>
+                    <h3 class="fw-bold">Create Account</h3>
+                    <p class="text-secondary" style="font-size: 0.9rem;">Join Dream Career Explorer today</p>
+                </div>
+                
+                <form action="{{ url_for('auth.register') }}" method="POST" autocomplete="off">
+                    <div class="mb-3">
+                        <label class="form-label text-secondary" style="font-size: 0.9rem;">Full Name</label>
+                        <input type="text" name="full_name" class="form-control-custom" placeholder="Enter Your Full Name" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label text-secondary" style="font-size: 0.9rem;">Username</label>
+                        <input type="text" name="username" class="form-control-custom" placeholder="User_name" autocomplete="off" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label text-secondary" style="font-size: 0.9rem;">Email Address</label>
+                        <input type="email" name="email" class="form-control-custom" placeholder="Enter Your Email id" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label text-secondary" style="font-size: 0.9rem;">Password</label>
+                        <input type="password" name="password" class="form-control-custom" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" autocomplete="new-password" required>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label text-secondary" style="font-size: 0.9rem;">Select Role</label>
+                        <select name="role" class="form-control-custom form-select bg-transparent text-light border-color" required>
+                            <option value="student" class="bg-dark text-light">Student</option>
+                            <option value="admin" class="bg-dark text-light">System Administrator</option>
+                        </select>
+                    </div>
+                    
+                    <button type="submit" class="glow-btn w-100 py-3 mb-3"><i class="fa-solid fa-user-plus me-2"></i> Sign Up</button>
+                    
+                    <p class="text-center text-secondary mb-0" style="font-size: 0.9rem;">
+                        Already have an account? <a href="{{ url_for('auth.login') }}" class="text-primary fw-semibold">Sign In</a>
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

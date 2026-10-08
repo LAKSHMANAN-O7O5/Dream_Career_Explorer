@@ -1,0 +1,190 @@
+{% extends "base.html" %}
+
+{% block title %}{{ career.title }} - Profile Details - Dream Career Explorer{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Header Hero Card -->
+    <div class="row mb-4" data-aos="fade-down">
+        <div class="col-12">
+            <div class="glass-card" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, var(--bg-card) 100%);">
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+                    <div>
+                        <span class="badge-custom badge-tech text-uppercase mb-2"><i class="fa-solid fa-compass"></i> Career Pathway</span>
+                        <h2 class="fw-bold mb-1">{{ career.title }}</h2>
+                        <div class="d-flex flex-wrap gap-3 mt-2 text-secondary" style="font-size: 0.9rem;">
+                            <span><i class="fa-solid fa-chart-line text-success"></i> Growth Rate: <strong>{{ career.growth_rate }}</strong></span>
+                            <span><i class="fa-solid fa-briefcase text-primary"></i> India Salary: <strong>{{ career.average_salary_in }}</strong></span>
+                            <span><i class="fa-solid fa-globe text-info"></i> International: <strong>{{ career.average_salary_intl }}</strong></span>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <a href="{{ url_for('student.roadmap', career_id=career.id) }}" class="glow-btn btn-sm"><i class="fa-solid fa-diagram-project"></i> Interactive Roadmap</a>
+                        <a href="{{ url_for('student.skill_gap', career_id=career.id) }}" class="btn btn-outline-secondary btn-sm text-light border-color"><i class="fa-solid fa-chart-bar"></i> Skill Gap Analysis</a>
+                        <a href="{{ url_for('student.job_readiness', career_id=career.id) }}" class="btn btn-outline-success btn-sm border-color" style="color: var(--success);"><i class="fa-solid fa-shield-halved"></i> Readiness</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Details and Navigation tabs -->
+    <div class="row">
+        <!-- Main details -->
+        <div class="col-lg-8" data-aos="fade-right">
+            <div class="glass-card mb-4 p-0">
+                <!-- Tab headers -->
+                <ul class="nav nav-tabs nav-justified border-color bg-transparent" id="careerTab" role="tablist" style="border-top-left-radius: 16px; border-top-right-radius: 16px; overflow: hidden;">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active py-3 border-0 text-light fw-bold" id="overview-tab" data-bs-toggle="tab" data-bs-target="#overview" type="button" role="tab">Overview & Salaries</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link py-3 border-0 text-light fw-bold" id="skills-tab" data-bs-toggle="tab" data-bs-target="#skills" type="button" role="tab">Skills & Tools</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link py-3 border-0 text-light fw-bold" id="projects-tab" data-bs-toggle="tab" data-bs-target="#projects" type="button" role="tab">Portfolio Projects</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link py-3 border-0 text-light fw-bold" id="prep-tab" data-bs-toggle="tab" data-bs-target="#prep" type="button" role="tab">Interview Prep</button>
+                    </li>
+                </ul>
+                
+                <!-- Tab contents -->
+                <div class="tab-content p-4" id="careerTabContent">
+                    <!-- Tab 1: Overview -->
+                    <div class="tab-pane fade show active text-secondary" id="overview" role="tabpanel">
+                        <h5 class="text-light fw-bold mb-3">Career Summary</h5>
+                        <p style="line-height: 1.6;">{{ career.overview }}</p>
+                        
+                        <h5 class="text-light fw-bold mt-4 mb-3">Roles & Responsibilities</h5>
+                        <p style="line-height: 1.6;">{{ career.responsibilities }}</p>
+                        
+                        <div class="row g-4 mt-2">
+                            <div class="col-md-6">
+                                <div class="p-3 rounded border border-color bg-transparent">
+                                    <h6 class="fw-bold text-light mb-2"><i class="fa-solid fa-chart-line text-primary me-2"></i> Future Scope</h6>
+                                    <p style="font-size: 0.9rem;" class="mb-0">{{ career.future_scope }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="p-3 rounded border border-color bg-transparent">
+                                    <h6 class="fw-bold text-light mb-2"><i class="fa-solid fa-building text-primary me-2"></i> Top Hiring Companies</h6>
+                                    <p style="font-size: 0.9rem;" class="mb-0">{{ career.top_companies }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tab 2: Skills & Tools -->
+                    <div class="tab-pane fade text-secondary" id="skills" role="tabpanel">
+                        <h5 class="text-light fw-bold mb-3">Target Skill Profile</h5>
+                        <p>To qualify for roles as a {{ career.title }}, you must build domain strength in these required capabilities:</p>
+                        
+                        <div class="row mt-4">
+                            <div class="col-md-6 mb-4">
+                                <h6 class="fw-bold text-light mb-3"><i class="fa-solid fa-laptop-code text-primary me-2"></i> Technical Core</h6>
+                                <div class="d-flex flex-column gap-2">
+                                    {% for sk in career.skills_required %}
+                                        {% if sk.skill_type == 'technical' %}
+                                            <div class="d-flex justify-content-between align-items-center p-2 rounded border border-color" style="background: rgba(255,255,255,0.01);">
+                                                <span class="text-light fw-medium">{{ sk.skill_name }}</span>
+                                                <span class="badge-custom badge-tech" style="font-size: 0.7rem;">Priority Weight: {{ sk.importance }}/5</span>
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6 mb-4">
+                                <h6 class="fw-bold text-light mb-3"><i class="fa-solid fa-users text-primary me-2"></i> Soft Skills & Methods</h6>
+                                <div class="d-flex flex-column gap-2">
+                                    {% for sk in career.skills_required %}
+                                        {% if sk.skill_type == 'soft' %}
+                                            <div class="d-flex justify-content-between align-items-center p-2 rounded border border-color" style="background: rgba(255,255,255,0.01);">
+                                                <span class="text-light fw-medium">{{ sk.skill_name }}</span>
+                                                <span class="badge-custom badge-warning" style="font-size: 0.7rem;">Importance: {{ sk.importance }}/5</span>
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tab 3: Projects -->
+                    <div class="tab-pane fade text-secondary" id="projects" role="tabpanel">
+                        <h5 class="text-light fw-bold mb-3">Recommended Capstone Projects</h5>
+                        <p>Add these projects to your portfolio to validate hands-on expertise for recruiters:</p>
+                        
+                        <div class="d-flex flex-column gap-3 mt-3">
+                            {% for proj in career.get_portfolio_projects() %}
+                                <div class="p-3 rounded border border-color bg-transparent">
+                                    <h6 class="fw-bold text-primary mb-2"><i class="fa-solid fa-code-fork me-2"></i> {{ proj.title }}</h6>
+                                    <p class="mb-0" style="font-size: 0.9rem;">{{ proj.description }}</p>
+                                </div>
+                            {% else %}
+                                <div class="p-3 rounded border border-color bg-transparent">
+                                    <h6 class="fw-bold text-primary mb-2"><i class="fa-solid fa-code-fork me-2"></i> Custom Capstone Project</h6>
+                                    <p class="mb-0" style="font-size: 0.9rem;">Build an end-to-end full stack application, database integrations, and deploy live on cloud infrastructure.</p>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Tab 4: Prep -->
+                    <div class="tab-pane fade text-secondary" id="prep" role="tabpanel">
+                        <h5 class="text-light fw-bold mb-3">Interview Preparation Framework</h5>
+                        <p style="line-height: 1.6;">{{ career.interview_tips or "Focus on core computer science concepts (Data Structures, Algorithms, Databases) and domain-specific frameworks. Practice system design and solve behavioral questions using the STAR method." }}</p>
+                        
+                        {% if career.success_story %}
+                            <h5 class="text-light fw-bold mt-4 mb-2"><i class="fa-solid fa-quote-left text-primary me-2"></i> Alumnus Success Story</h5>
+                            <blockquote class="p-3 rounded border border-color bg-transparent italic mb-0" style="font-style: italic; line-height: 1.6;">
+                                "{{ career.success_story }}"
+                            </blockquote>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar options -->
+        <div class="col-lg-4" data-aos="fade-left" data-aos-delay="200">
+            <!-- Courses link card -->
+            <div class="glass-card mb-4 text-center">
+                <i class="fa-solid fa-graduation-cap fs-1 text-primary mb-3"></i>
+                <h5 class="fw-bold mb-2">Learning Courses</h5>
+                <p class="text-secondary" style="font-size: 0.9rem;">Explore recommended free courses, YouTube tutorials, and textbooks curated for this role.</p>
+                <a href="{{ url_for('student.courses', career_id=career.id) }}" class="glow-btn btn-sm w-100 py-3 mt-2"><i class="fa-solid fa-circle-play"></i> View Study Resources</a>
+            </div>
+
+            <!-- Qualification and certifications credentials required -->
+            <div class="glass-card mb-4">
+                <h5 class="fw-bold mb-3"><i class="fa-solid fa-award text-primary me-2"></i> Industry Standards</h5>
+                
+                <h6 class="text-secondary fw-semibold mt-3" style="font-size: 0.8rem; letter-spacing: 1px;">RECOMMENDED DEGREES</h6>
+                <div class="d-flex flex-wrap gap-2 mb-3">
+                    {% for deg in degrees %}
+                        <span class="badge-custom badge-tech" style="font-size: 0.75rem;">{{ deg }}</span>
+                    {% else %}
+                        <span class="badge-custom badge-tech" style="font-size: 0.75rem;">Bachelor of Technology (CS/IT/ECE)</span>
+                    {% endfor %}
+                </div>
+
+                <h6 class="text-secondary fw-semibold" style="font-size: 0.8rem; letter-spacing: 1px;">TARGET CERTIFICATIONS</h6>
+                <ul class="list-group list-group-flush bg-transparent">
+                    {% for cert in certifications %}
+                        <li class="list-group-item bg-transparent text-secondary border-color px-0 py-2" style="font-size: 0.9rem;">
+                            <i class="fa-solid fa-check text-success me-2"></i> {{ cert }}
+                        </li>
+                    {% else %}
+                        <li class="list-group-item bg-transparent text-secondary border-color px-0 py-2" style="font-size: 0.9rem;">
+                            <i class="fa-solid fa-check text-success me-2"></i> Relevant Cloud/Domain Associate Credentials
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            
+        </div>
+    </div>
+</div>
+{% endblock %}

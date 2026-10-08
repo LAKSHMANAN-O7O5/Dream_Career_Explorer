@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}Login - Dream Career Explorer{% endblock %}
+
+{% block content %}
+<div class="container d-flex align-items-center justify-content-center" style="min-height: 80vh;">
+    <div class="row w-100 justify-content-center">
+        <div class="col-md-6 col-lg-5" data-aos="zoom-in">
+            <div class="glass-card">
+                <div class="text-center mb-4">
+                    <i class="fa-solid fa-compass fs-1 text-primary mb-2"></i>
+                    <h3 class="fw-bold">Welcome Back</h3>
+                    <p class="text-secondary" style="font-size: 0.9rem;">Sign in to continue to your Career Dashboard</p>
+                </div>
+                
+                <form action="{{ url_for('auth.login') }}" method="POST" autocomplete="off">
+                    <div class="mb-3">
+    <label class="form-label text-light" style="font-size:0.9rem;">Login As</label>
+
+    <div class="position-relative">
+        <i class="fa-solid fa-user-shield position-absolute"
+           style="left:15px; top:50%; transform:translateY(-50%); color:#9ca3af; z-index:10;"></i>
+
+        <select name="role"
+                class="form-control-custom"
+                required
+                style="padding-left:45px; color:#6c3483">
+            <option value="">Select Role</option>
+            <option value="student">Student</option>
+            <option value="admin">System Admin</option>
+        </select>
+    </div>
+</div>
+                    <div class="mb-3">
+                        <label class="form-label text-light" style="font-size: 0.9rem;">Username or Email</label>
+                        <div class="position-relative mb-3">
+    <i class="fa-solid fa-user position-absolute"
+       style="left:15px; top:50%; transform:translateY(-50%); color:#9ca3af; z-index:10;"></i>
+
+    <input type="text"
+           name="username"
+           autocomplete="off"
+           class="form-control-custom"
+           placeholder="Enter your username or email"
+           required
+           style="padding-left:45px;">
+</div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <div class="d-flex justify-content-between mb-1">
+                            <label class="form-label text-light" style="font-size: 0.9rem; margin-bottom: 0;">Password</label>
+                            <a href="{{ url_for('auth.forgot_password') }}" class="text-muted" style="font-size: 0.8rem;">Forgot Password?</a>
+                        </div>
+                        <div class="position-relative mb-4">
+    <i class="fa-solid fa-lock position-absolute"
+       style="left:15px; top:50%; transform:translateY(-50%); color:#9ca3af; z-index:10;"></i>
+
+    <input type="password"
+           name="password"
+           autocomplete="new-password"
+           class="form-control-custom"
+           placeholder="Enter your password"
+           required
+           style="padding-left:45px;">
+</div>
+                    </div>
+                    
+                    <button type="submit" class="glow-btn w-100 py-3 mb-3"><i class="fa-solid fa-right-to-bracket me-2"></i> Sign In</button>
+                    
+                    <p class="text-center text-secondary mb-0" style="font-size: 0.9rem;">
+                        Don't have an account? <a href="{{ url_for('auth.register') }}" class="text-primary fw-semibold">Sign Up</a>
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

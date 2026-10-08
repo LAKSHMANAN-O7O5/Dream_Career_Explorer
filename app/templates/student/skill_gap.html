@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+
+{% block title %}Skill Gap Analysis: {{ career.title }} - Dream Career Explorer{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Header Hero -->
+    <div class="row mb-4" data-aos="fade-down">
+        <div class="col-12">
+            <div class="glass-card" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, var(--bg-card) 100%);">
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+                    <div>
+                        <span class="badge-custom badge-tech mb-2"><i class="fa-solid fa-chart-column"></i> Analytics Core</span>
+                        <h2 class="fw-bold mb-1">Skill Gap Analysis</h2>
+                        <p class="text-secondary mb-0">Target Profile: <strong>{{ career.title }}</strong>. See how your credentials align with current job postings.</p>
+                    </div>
+                    <div>
+                        <a href="{{ url_for('main.career_detail', career_id=career.id) }}" class="btn btn-outline-secondary btn-sm text-light border-color"><i class="fa-solid fa-arrow-left"></i> Career Overview</a>
+                        <a href="{{ url_for('student.roadmap', career_id=career.id) }}" class="glow-btn btn-sm"><i class="fa-solid fa-diagram-project"></i> Learning Roadmap</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Match Percentage Row -->
+    <div class="row g-4 mb-4">
+        <div class="col-lg-4" data-aos="fade-right">
+            <div class="glass-card text-center h-100 d-flex flex-column justify-content-center py-5">
+                <h5 class="text-secondary fw-bold mb-3" style="font-size: 0.9rem; letter-spacing: 1px;">PROFILE SYNC</h5>
+                <h1 class="display-2 fw-extrabold m-0 {% if match_percentage >= 75 %}text-success{% elif match_percentage >= 50 %}text-warning{% else %}text-danger{% endif %}">
+                    {{ match_percentage }}%
+                </h1>
+                <p class="text-secondary mt-2 mb-0">Total Required Skills Match</p>
+                
+                <div class="progress mx-auto mt-4 bg-secondary" style="height: 8px; max-width: 200px;">
+                    <div class="progress-bar {% if match_percentage >= 75 %}bg-success{% elif match_percentage >= 50 %}bg-warning{% else %}bg-danger{% endif %}" role="progressbar" style="width: {{ match_percentage }}%;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-8" data-aos="fade-left">
+            <div class="glass-card h-100">
+                <h5 class="fw-bold mb-3"><i class="fa-solid fa-circle-info text-primary me-2"></i> Skill Gap Summary</h5>
+                <p class="text-secondary mb-4" style="line-height: 1.6;">
+                    The platform compares your portfolio skills with the <strong>{{ career.skills_required|length }} core skills</strong> required for a {{ career.title }}. We check both existence and proficiency to determine your job readiness.
+                </p>
+                
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <div class="p-3 rounded border border-color text-center bg-transparent">
+                            <h3 class="fw-bold text-success mb-1">{{ strengths|length }}</h3>
+                            <span class="text-secondary" style="font-size: 0.85rem;">Strength Areas</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="p-3 rounded border border-color text-center bg-transparent">
+                            <h3 class="fw-bold text-warning mb-1">{{ weak_areas|length }}</h3>
+                            <span class="text-secondary" style="font-size: 0.85rem;">Weak Areas (< 70%)</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="p-3 rounded border border-color text-center bg-transparent">
+                            <h3 class="fw-bold text-danger mb-1">{{ missing_skills|length }}</h3>
+                            <span class="text-secondary" style="font-size: 0.85rem;">Missing Skills</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Skills Breakdown Cards Grid -->
+    <div class="row g-4 mb-4">
+        <!-- 1. Strengths -->
+        <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+            <div class="glass-card h-100">
+                <h5 class="fw-bold text-success mb-3"><i class="fa-solid fa-circle-check me-2"></i> Strength Areas (🏆)</h5>
+                <p class="text-secondary" style="font-size: 0.85rem;">Skills you possess with high proficiency (≥70%):</p>
+                
+                <div class="d-flex flex-column gap-2 mt-3">
+                    {% for sk in strengths %}
+                        <div class="p-2 rounded border border-color bg-transparent d-flex justify-content-between align-items-center">
+                            <span class="text-light fw-medium">{{ sk.skill_name }}</span>
+                            <span class="badge bg-success">{{ sk.proficiency }}%</span>
+                        </div>
+                    {% else %}
+                        <div class="text-center text-unmuted py-4">No strength areas identified yet. Raise your skill proficiency in the portfolio editor.</div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. Weak Areas -->
+        <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+            <div class="glass-card h-100">
+                <h5 class="fw-bold text-warning mb-3"><i class="fa-solid fa-triangle-exclamation me-2"></i> Weak Areas (⚠️)</h5>
+                <p class="text-secondary" style="font-size: 0.85rem;">Skills you possess that need refinement (<70%):</p>
+                
+                <div class="d-flex flex-column gap-3 mt-3">
+                    {% for sk in weak_areas %}
+                        <div>
+                            <div class="d-flex justify-content-between text-secondary mb-1" style="font-size: 0.85rem;">
+                                <span class="text-light fw-medium">{{ sk.skill_name }}</span>
+                                <span>{{ sk.proficiency }}%</span>
+                            </div>
+                            <div class="progress bg-secondary" style="height: 6px;">
+                                <div class="progress-bar bg-warning" role="progressbar" style="width: {{ sk.proficiency }}%;"></div>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="text-center text-unmuted py-4">No weak areas identified. Great job!</div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. Missing Skills -->
+        <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
+            <div class="glass-card h-100">
+                <h5 class="fw-bold text-danger mb-3"><i class="fa-solid fa-circle-xmark me-2"></i> Missing Skills (❌)</h5>
+                <p class="text-secondary" style="font-size: 0.85rem;">Required skills absent from your portfolio:</p>
+                
+                <div class="d-flex flex-wrap gap-2 mt-3">
+                    {% for sk in missing_skills %}
+                        <span class="badge bg-danger p-2" style="font-size: 0.8rem;">{{ sk.skill_name }}</span>
+                    {% else %}
+                        <div class="text-center text-unmuted py-4 w-100">You possess all required skills! Polish them to hit 100% job readiness.</div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Suggested Learning Order Path -->
+    <div class="row" data-aos="fade-up">
+        <div class="col-12">
+            <div class="glass-card">
+                <h5 class="fw-bold mb-4"><i class="fa-solid fa-graduation-cap text-primary me-2"></i> Suggested Learning Order (Curated Path)</h5>
+                
+                {% if suggested_order %}
+                    <div class="d-flex flex-column gap-3">
+                        {% for item in suggested_order %}
+                            <div class="p-3 rounded border border-color bg-secondary d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+                                <div>
+                                    <span class="badge-custom badge-danger text-uppercase mb-2" style="font-size: 0.65rem;">BRIDGE GAP: {{ item.skill }}</span>
+                                    <h6 class="fw-bold text-light mb-1">{{ item.stage }}</h6>
+                                    <p class="text-secondary mb-0" style="font-size: 0.85rem;">Description: {{ item.resources }}</p>
+                                </div>
+                                <div>
+                                    <a href="{{ url_for('student.courses', career_id=career.id) }}" class="btn btn-outline-primary btn-sm border-color" style="color: var(--primary);"><i class="fa-solid fa-circle-play"></i> Find Courses</a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-secondary mb-0">No specific missing skill mapping found. Review the complete learning roadmap for detailed suggestions.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

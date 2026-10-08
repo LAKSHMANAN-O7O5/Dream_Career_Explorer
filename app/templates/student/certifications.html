@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+
+{% block title %}Certification Tracker - Dream Career Explorer{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Header Hero -->
+    <div class="row mb-4" data-aos="fade-down">
+        <div class="col-12">
+            <div class="glass-card" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, var(--bg-card) 100%);">
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+                    <div>
+                        <span class="badge-custom badge-tech mb-2"><i class="fa-solid fa-award"></i> Verification Node</span>
+                        <h2 class="fw-bold mb-1">Certification Tracker</h2>
+                        <p class="text-secondary mb-0">Record completed credentials, upload verification documents, and discover target credentials.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Left: Upload certification & Tracker list -->
+        <div class="col-lg-8" data-aos="fade-right">
+            <!-- Add Certification Card -->
+            <div class="glass-card mb-4">
+                <h5 class="fw-bold mb-4"><i class="fa-solid fa-file-shield text-primary me-2"></i> Register New Certification</h5>
+                
+                <form action="{{ url_for('student.certifications') }}" method="POST" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-secondary" style="font-size: 0.9rem;">Certification Title</label>
+                            <input type="text" name="title" class="form-control-custom" placeholder="e.g. AWS Cloud Practitioner" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-secondary" style="font-size: 0.9rem;">Issuing Organization</label>
+                            <input type="text" name="issuing_organization" class="form-control-custom" placeholder="e.g. Amazon Web Services, Coursera" required>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-secondary" style="font-size: 0.9rem;">Issue Date</label>
+                            <input type="date" name="issue_date" class="form-control-custom text-light bg-transparent" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-secondary" style="font-size: 0.9rem;">Credential URL</label>
+                            <input type="url" name="credential_url" class="form-control-custom" placeholder="https://verify.credentials/code">
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label text-secondary" style="font-size: 0.9rem;">Upload Verification File (Image / PDF)</label>
+                        <input type="file" name="verification_file" class="form-control-custom bg-transparent text-light border-color" accept="image/*,application/pdf">
+                        <div class="form-text text-unmuted "style="color:dimgrey;">Uploading a verification file automatically marks the certificate as Verified.</div>
+                    </div>
+
+                    <button type="submit" class="glow-btn px-4 py-3"><i class="fa-solid fa-cloud-arrow-up"></i> Log Certification</button>
+                </form>
+            </div>
+
+            <!-- List logged certificates -->
+            <div class="glass-card " >
+                <h5 class="fw-bold mb-4"><i class="fa-solid fa-list-check text-primary me-2"></i> Logged Certifications</h5>
+                
+                <div class="d-flex flex-column gap-3">
+                    {% for cert in certs %}
+                        <div class="p-3 rounded border border-color bg-transparent d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="d-flex align-items-center gap-2 mb-1">
+                                    <h6 class="fw-bold text-light mb-0">{{ cert.title }}</h6>
+                                    {% if cert.status == 'completed' or cert.verification_file %}
+                                        <span class="badge bg-success p-1" style="font-size: 0.65rem;"><i class="fa-solid fa-circle-check"></i> Verified</span>
+                                    {% else %}
+                                        <span class="badge bg-warning p-1" style="font-size: 0.65rem;"><i class="fa-solid fa-clock"></i> Pending File</span>
+                                    {% endif %}
+                                </div>
+                                <span class="text-secondary" style="font-size: 0.8rem;">
+                                    Issuer: <strong>{{ cert.issuing_organization }}</strong> &bull; Date: <strong>{{ cert.issue_date.strftime('%B %Y') }}</strong>
+                                </span>
+                                {% if cert.credential_url %}
+                                    <a href="{{ cert.credential_url }}" target="_blank" class="d-block mt-1 text-primary" style="font-size: 0.8rem;"><i class="fa-solid fa-link"></i> Verification URL</a>
+                                {% endif %}
+                            </div>
+                            <form action="{{ url_for('student.delete_certification', cert_id=cert.id) }}" method="POST" class="m-0">
+                                <button type="submit" class="btn btn-link text-danger p-0" title="Delete Certification"><i class="fa-solid fa-trash-can"></i></button>
+                            </form>
+                        </div>
+                    {% else %}
+                        <p class="text-secondary text-center py-4 mb-0">No certificates logged yet.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Right: Target Recommendations -->
+        <div class="col-lg-4" data-aos="fade-left" data-aos-delay="200">
+            <div class="glass-card h-100">
+                <div class="text-center mb-4 border-bottom border-color pb-3">
+                    <i class="fa-solid fa-award fs-1 text-primary mb-3 animate-bounce"></i>
+                    <h5 class="fw-bold">Target Recommendations</h5>
+                    <p class="text-secondary mb-0" style="font-size: 0.85rem;">Curated credentials highly values by recruiters in your matched domain.</p>
+                </div>
+                
+                {% if recommendations %}
+                    <ul class="list-group list-group-flush bg-transparent">
+                        {% for cert_name in recommendations %}
+                            <li class="list-group-item bg-transparent text-secondary border-color px-0 py-3" style="font-size: 0.9rem;">
+                                <div class="d-flex align-items-start gap-2">
+                                    <i class="fa-solid fa-shield-halved text-primary mt-1"></i>
+                                    <div>
+                                        <span class="text-light fw-medium">{{ cert_name }}</span>
+                                        <p class="text-unmuted mb-0" style="font-size: 0.75rem;color:dimgrey;">Highly sought by hiring companies</p>
+                                    </div>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="text-secondary text-center py-4">Take the compatibility quiz to unlock domain-specific certification guidelines.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block title %}AI Career Advisor - Dream Career Explorer{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Header -->
+    <div class="row mb-4" data-aos="fade-down">
+        <div class="col-12">
+            <div class="glass-card" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, var(--bg-card) 100%);">
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+                    <div>
+                        <span class="badge-custom badge-tech mb-2"><i class="fa-solid fa-robot"></i> Advisor Core</span>
+                        <h2 class="fw-bold mb-1">AI Career Advisor Chatbot</h2>
+                        <p class="text-secondary mb-0">Ask questions about learning resources, interview questions, or role growth forecasts.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chat Console -->
+    <div class="row" data-aos="fade-up">
+        <div class="col-lg-9 mx-auto">
+            <div class="glass-card p-0 overflow-hidden">
+                
+                <!-- Chat Window container -->
+                <div class="chatbot-chat-window">
+                    <div class="chatbot-messages-container" id="chat-messages">
+                        <!-- Bot greeting bubble -->
+                        <div class="chat-bubble bot">
+                            Hello! I am your dedicated **AI Career Advisor**. 🤖<br><br>
+                            I can help you analyze salaries, suggest preparation roadmaps, mock standard interview questions, or review your skill gaps. What would you like to learn today?
+                        </div>
+                    </div>
+                    
+<!-- Quick Suggestions -->
+ <!-- Quick Suggestions Chips -->
+<div class="px-4 py-2 border-top border-color d-flex flex-wrap gap-2" style="background: rgba(0, 0, 0, 0.15);">
+    <button class="btn btn-sm btn-outline-secondary text-light border-color chip-suggest" data-text="What is the future growth rate of an AI Engineer?">AI Growth</button>
+    <button class="btn btn-sm btn-outline-secondary text-light border-color chip-suggest" data-text="List core skills required to become a DevOps Architect.">DevOps Skills</button>
+    <button class="btn btn-sm btn-outline-secondary text-light border-color chip-suggest" data-text="Suggest a standard database study guide.">Database Guide</button>
+    <button class="btn btn-sm btn-outline-secondary text-light border-color chip-suggest" data-text="Provide mock interview questions for a Full Stack Developer.">Interview Prep</button>
+</div>
+
+<div class="px-4 py-2 border-top border-color d-flex flex-wrap gap-2" style="background: rgba(0, 0, 0, 0.15);">
+
+    <button class="btn btn-sm btn-outline-primary chip-suggest"
+        data-text="Recommend a career for me">
+        🎯 Recommend Career
+    </button>
+
+    <button class="btn btn-sm btn-outline-primary chip-suggest"
+        data-text="Show my quiz result">
+        📊 My Quiz Result
+    </button>
+
+    <button class="btn btn-sm btn-outline-primary chip-suggest"
+        data-text="Show my learning roadmap">
+        📚 Learning Roadmap
+    </button>
+
+    <button class="btn btn-sm btn-outline-primary chip-suggest"
+        data-text="Give resume tips">
+        💼 Resume Tips
+    </button>
+
+    <button class="btn btn-sm btn-outline-primary chip-suggest"
+        data-text="Ask interview questions">
+        📝 Interview Questions
+    </button>
+
+    <button class="btn btn-sm btn-outline-primary chip-suggest"
+        data-text="Software Engineer salary">
+        💰 Salary
+    </button>
+
+    <button class="btn btn-sm btn-outline-primary chip-suggest"
+        data-text="Top IT companies">
+        🏢 Top Companies
+    </button>
+
+    <button class="btn btn-sm btn-outline-primary chip-suggest"
+        data-text="Suggest certifications">
+        📜 Certifications
+    </button>
+
+</div>
+
+                    <!-- Input console -->
+                    <div class="p-3 border-top border-color bg-transparent d-flex gap-2">
+                        <input type="text" id="chat-input" class="form-control-custom m-0 border-0" placeholder="Type your career query here..." style="background: rgba(255, 255, 255, 0.03);">
+                        <button id="send-btn" class="glow-btn px-4 py-3"><i class="fa-solid fa-paper-plane"></i></button>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const chips = document.querySelectorAll('.chip-suggest');
+    const input = document.getElementById('chat-input');
+    const sendBtn = document.getElementById('send-btn');
+    
+    chips.forEach(chip => {
+        chip.addEventListener('click', () => {
+            input.value = chip.getAttribute('data-text');
+            sendBtn.click();
+        });
+    });
+});
+</script>
+{% endblock %}

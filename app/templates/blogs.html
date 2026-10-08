@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}Career Guides & Blog - Dream Career Explorer{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Header Hero -->
+    <div class="row mb-4" data-aos="fade-down">
+        <div class="col-12">
+            <div class="glass-card" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, var(--bg-card) 100%);">
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+                    <div>
+                        <span class="badge-custom badge-tech mb-2"><i class="fa-solid fa-book"></i> Resource Core</span>
+                        <h2 class="fw-bold mb-1">Career Development Guides</h2>
+                        <p class="text-secondary mb-0">Expert frameworks, certifications recommendations, and strategy guides to prepare for placement.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Blogs Grid -->
+    <div class="row g-4" data-aos="fade-up" data-aos-delay="100">
+        {% for blog in blogs %}
+            <div class="col-md-6 col-lg-4">
+                <div class="glass-card h-100 d-flex flex-column justify-content-between">
+                    <div>
+                        <span class="badge-custom badge-tech mb-3">{{ (blog.tags or 'Career Guidance').split(',')[0] }}</span>
+                        <h4 class="fw-bold mb-2"><a href="{{ url_for('main.blog_detail', blog_id=blog.id) }}" class="text-light text-decoration-none">{{ blog.title }}</a></h4>
+                        <p class="text-secondary" style="font-size: 0.9rem; line-height: 1.5;">{{ blog.content[:160] }}...</p>
+                    </div>
+                    
+                    <div class="mt-4 pt-3 border-top border-color d-flex justify-content-between text-muted" style="font-size: 0.8rem;">
+                        <span><i class="fa-solid fa-clock me-1"></i> {{ blog.read_time }} min read</span>
+                        <span>{{ blog.created_at.strftime('%d %b %Y') }}</span>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="col-12 text-center py-5">
+                <p class="text-secondary">No blog articles published yet.</p>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,205 @@
+/* --- Landing Page Styling --- */
+
+/* Hero Section */
+.hero-section {
+    position: relative;
+    padding: 120px 0 80px 0;
+    min-height: 90vh;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+}
+
+.hero-glow-1 {
+    position: absolute;
+    top: -10%;
+    right: -10%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.12) 0%, rgba(0, 0, 0, 0) 70%);
+    z-index: 1;
+    pointer-events: none;
+}
+
+.hero-glow-2 {
+    position: absolute;
+    bottom: -10%;
+    left: -10%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(16, 185, 129, 0.08) 0%, rgba(0, 0, 0, 0) 70%);
+    z-index: 1;
+    pointer-events: none;
+}
+
+.hero-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 24px;
+}
+
+.hero-subtitle {
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+    margin-bottom: 36px;
+    max-width: 600px;
+}
+
+.btn-group-custom {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+
+/* Partner Companies Carousel */
+.partners-section {
+    padding: 60px 0;
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.company-logo {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--text-muted);
+    letter-spacing: 2px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    opacity: 0.6;
+    transition: opacity 0.3s, color 0.3s;
+}
+.company-logo:hover {
+    opacity: 1;
+    color: var(--primary);
+}
+
+/* Feature Cards Grid */
+.features-section {
+    padding: 100px 0;
+}
+
+.feature-icon-wrapper {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    background: var(--primary-glow);
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+}
+
+/* Different colors for feature icons */
+
+.icon-blue {
+    color: #2563eb;
+    background: #dbeafe;
+}
+
+.icon-purple {
+    color: #9333ea;
+    background: #f3e8ff;
+}
+
+.icon-orange {
+    color: #ea580c;
+    background: #ffedd5;
+}
+
+.icon-red {
+    color: #dc2626;
+    background: #fee2e2;
+}
+
+.icon-green {
+    color: #16a34a;
+    background: #dcfce7;
+}
+
+.icon-pink {
+    color: #db2777;
+    background: #fce7f3;
+}
+
+.feature-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.feature-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+    border-color: var(--primary);
+}
+
+/* FAQ Section */
+.faq-section {
+    padding: 100px 0;
+}
+
+.faq-accordion .accordion-item {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px !important;
+    margin-bottom: 16px;
+    overflow: hidden;
+}
+
+.faq-accordion .accordion-button {
+    background: transparent;
+    color: var(--text-primary);
+    font-weight: 600;
+    padding: 20px;
+    border: none;
+    box-shadow: none;
+}
+.faq-accordion .accordion-button::after {
+    filter: invert(1);
+}
+[data-theme="light"] .faq-accordion .accordion-button::after {
+    filter: none;
+}
+
+.faq-accordion .accordion-button:not(.collapsed) {
+    color: var(--primary);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.faq-accordion .accordion-body {
+    color: var(--text-secondary);
+    padding: 20px;
+    line-height: 1.6;
+}
+
+/* Testimonial card overrides */
+.testimonial-card {
+    text-align: center;
+    padding: 40px;
+}
+.testimonial-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin: 0 auto 20px auto;
+    border: 3px solid var(--primary);
+}
+
+/* Contact Section */
+.contact-section {
+    padding: 100px 0;
+}
+
+/* Responsive */
+@media (max-width: 767px) {
+    .hero-title {
+        font-size: 2.5rem;
+    }
+    .btn-group-custom {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}

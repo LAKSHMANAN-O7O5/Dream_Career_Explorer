@@ -1,0 +1,294 @@
+{% extends "base.html" %}
+
+{% block title %}Dream Career Explorer - AI Powered Career Guidance & Skill Development{% endblock %}
+
+{% block content %}
+<!-- 1. Hero Section -->
+<header class="hero-section">
+    <div class="hero-glow-1"></div>
+    <div class="hero-glow-2"></div>
+    
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-5 mb-lg-0" data-aos="fade-right">
+                <span class="badge-custom badge-tech mb-3"><i class="fa-solid fa-wand-magic-sparkles"></i> AI-Powered Guidance Core</span>
+                <h1 class="hero-title">Unlock Your True <span class="text-primary">Career Potential</span></h1>
+                <p class="hero-subtitle">
+                    Bridge your skill gap, generate personalized learning roadmaps, build ATS-friendly resumes, and track your readiness for industry-level jobs.
+                </p>
+                <div class="btn-group-custom">
+                    {% if current_user %}
+                        <a href="{{ url_for('student.dashboard') }}" class="glow-btn px-4 py-3"><i class="fa-solid fa-chart-line"></i> Go to Dashboard</a>
+                    {% else %}
+                        <a href="{{ url_for('auth.register') }}" class="glow-btn px-4 py-3"><i class="fa-solid fa-rocket"></i> Get Started Free</a>
+                        <a href="{{ url_for('auth.login') }}" class="btn btn-outline-secondary px-4 py-3 border-color text-light explore-careers-btn">
+    <i class="fa-solid fa-magnifying-glass"></i> Explore Careers
+</a>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="col-lg-6" data-aos="fade-left">
+                <!-- Premium Grid UI mockup image generated dynamically or clean mock representation -->
+                <div class="glass-card p-4 border border-color" style="box-shadow: 0 20px 50px rgba(99, 102, 241, 0.15);">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div class="d-flex gap-2">
+                            <span class="badge rounded-circle bg-danger p-1" style="width: 10px; height: 10px;"></span>
+                            <span class="badge rounded-circle bg-warning p-1" style="width: 10px; height: 10px;"></span>
+                            <span class="badge rounded-circle bg-success p-1" style="width: 10px; height: 10px;"></span>
+                        </div>
+                        <span class="badge-custom badge-success"><i class="fa-solid fa-shield-halved"></i> Active Job Readiness</span>
+                    </div>
+                    
+                    <div class="text-center my-4">
+                        <div class="progress-ring-container" data-pct="85">
+                            <svg class="progress-ring" width="120" height="120">
+                                <circle class="progress-ring-circle" stroke="#6366f1" stroke-width="8" fill="transparent" r="50" cx="60" cy="60"/>
+                            </svg>
+                            <div class="progress-ring-text">85%</div>
+                        </div>
+                        <h4 class="mt-3 mb-1 fw-bold">Data Scientist Match</h4>
+                        <p class="text-secondary" style="font-size: 0.9rem;">Bridged 4 missing skills. Ready to Apply!</p>
+                    </div>
+
+                    <hr class="border-color">
+                    <div class="d-flex justify-content-between align-items-center text-secondary mb-2" style="font-size: 0.85rem;">
+                        <span><i class="fa-solid fa-code text-primary me-2"></i> Skills Verified</span>
+                        <span class="text-light fw-bold">8 / 10</span>
+                    </div>
+                    <div class="progress mb-3 bg-secondary" style="height: 6px;">
+                        <div class="progress-bar bg-primary" role="progressbar" style="width: 80%;" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between align-items-center text-secondary" style="font-size: 0.85rem;">
+                        <span><i class="fa-solid fa-award text-success me-2"></i> Verified Certificates</span>
+                        <span class="text-light fw-bold">3 Completed</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- 2. Statistics Counter Section 
+<section class="partners-section">
+    <div class="container text-center">
+        <div class="row">
+            <div class="col-md-3 col-6 mb-4 mb-md-0" data-aos="zoom-in" data-aos-delay="100">
+                <h2 class="text-primary fw-extrabold mb-1" style="font-size: 2.5rem;">{{ stats.students }}+</h2>
+                <p class="text-secondary text-uppercase font-weight-bold" style="font-size: 0.75rem; letter-spacing: 1px;">Registered Students</p>
+            </div>
+            <div class="col-md-3 col-6 mb-4 mb-md-0" data-aos="zoom-in" data-aos-delay="200">
+                <h2 class="text-primary fw-extrabold mb-1" style="font-size: 2.5rem;">{{ stats.careers }}</h2>
+                <p class="text-secondary text-uppercase font-weight-bold" style="font-size: 0.75rem; letter-spacing: 1px;">Industry Careers</p>
+            </div>
+            <div class="col-md-3 col-6" data-aos="zoom-in" data-aos-delay="300">
+                <h2 class="text-primary fw-extrabold mb-1" style="font-size: 2.5rem;">{{ stats.quizzes }}+</h2>
+                <p class="text-secondary text-uppercase font-weight-bold" style="font-size: 0.75rem; letter-spacing: 1px;">Assessments Completed</p>
+            </div>
+            <div class="col-md-3 col-6" data-aos="zoom-in" data-aos-delay="400">
+                <h2 class="text-primary fw-extrabold mb-1" style="font-size: 2.5rem;">{{ stats.certs }}+</h2>
+                <p class="text-secondary text-uppercase font-weight-bold" style="font-size: 0.75rem; letter-spacing: 1px;">Certs Handled</p>
+            </div>
+        </div>
+    </div>
+</section>
+>
+<!-- 3. Key Feature Cards Section -->
+<section class="features-section">
+    <div class="container">
+        <div class="text-center mb-5" data-aos="fade-up">
+            <h2 class="section-title">Complete Career Toolkit</h2>
+            <p class="text-secondary max-width-600 mx-auto">Explore features designed to transition you from an academic background to an industry professional.</p>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+                <div class="glass-card feature-card h-100">
+                    <div class="feature-icon-wrapper icon-blue"><i class="fa-solid fa-list-check"></i></div>
+                    <h4 class="fw-bold mb-2">Aptitude Assessment</h4>
+                    <p class="text-secondary mb-0">Evaluate technical proficiency, logic, leadership, and analytical tendencies through our 45-question weighted quiz engine.</p>
+                </div>
+            </div>
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+                <div class="glass-card feature-card h-100">
+                    <div class="feature-icon-wrapper icon-purple"><i class="fa-solid fa-diagram-project"></i></div>
+                    <h4 class="fw-bold mb-2">Roadmap Tracker</h4>
+                    <p class="text-secondary mb-0">Receive a detailed milestone roadmap from foundations, core technologies, certifications, up to interview readiness preparation.</p>
+                </div>
+            </div>
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
+                <div class="glass-card feature-card h-100">
+                    <div class="feature-icon-wrapper icon-orange"><i class="fa-solid fa-chart-column"></i></div>
+                    <h4 class="fw-bold mb-2">Skill Gap Analysis</h4>
+                    <p class="text-secondary mb-0">Direct comparison matching of your portfolio profile against live job requirements, highlighting strengths and missing key tools.</p>
+                </div>
+            </div>
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+                <div class="glass-card feature-card h-100">
+                    <div class="feature-icon-wrapper icon-red"><i class="fa-solid fa-file-pdf"></i></div>
+                    <h4 class="fw-bold mb-2">ATS Resume Builder</h4>
+                    <p class="text-secondary mb-0">Create clean, structured resumes meeting applicant tracking systems formatting parameters and download as printable PDFs.</p>
+                </div>
+            </div>
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+                <div class="glass-card feature-card h-100">
+                    <div class="feature-icon-wrapper icon-green"><i class="fa-solid fa-robot"></i></div>
+                    <h4 class="fw-bold mb-2">AI Career Advisor</h4>
+                    <p class="text-secondary mb-0">A 24/7 dedicated advisor chat chatbot capable of answering salary inquiries, roadmap suggestions, and interview templates.</p>
+                </div>
+            </div>
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
+                <div class="glass-card feature-card h-100">
+                    <div class="feature-icon-wrapper icon-pink"><i class="fa-solid fa-users-gear"></i></div>
+                    <h4 class="fw-bold mb-2">Admin Control Hub</h4>
+                    <p class="text-secondary mb-0">Granular administrative console monitoring student counts, popular career distributions, skill ratios, and seed parameters.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 4. Recruiter partners -->
+<section class="partners-section text-center">
+    <div class="container">
+        <h6 class="text-uppercase text-secondary mb-4" style="letter-spacing: 2px; font-size: 0.8rem;">Preparation Targeting Top Innovators</h6>
+        <div class="d-flex flex-wrap justify-content-center align-items-center gap-5">
+            <div class="company-logo"><i class="fa-brands fa-google"></i> Google</div>
+            <div class="company-logo"><i class="fa-brands fa-amazon"></i> Amazon</div>
+            <div class="company-logo"><i class="fa-brands fa-microsoft"></i> Microsoft</div>
+            <div class="company-logo"><i class="fa-brands fa-apple"></i> Apple</div>
+            <div class="company-logo"><i class="fa-brands fa-meta"></i> Meta</div>
+        </div>
+    </div>
+</section>
+
+<!-- 5. Recent Blogs / Success Stories -->
+{% if blogs %}
+<section class="features-section">
+    <div class="container">
+        <div class="text-center mb-5" data-aos="fade-up">
+            <h2 class="section-title">Latest Career Insights</h2>
+            <p class="text-secondary max-width-600 mx-auto">Stay up to date with guides, strategies, and learning frameworks written by domain experts.</p>
+        </div>
+        
+        <div class="row g-4">
+            {% for blog in blogs %}
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="{{ loop.index * 100 }}">
+                    <div class="glass-card h-100 d-flex flex-column justify-content-between">
+                        <div>
+                            <span class="badge-custom badge-tech mb-3">{{ (blog.tags or 'Career Guidance').split(',')[0] }}</span>
+                            <h4 class="fw-bold mb-2"><a href="{{ url_for('main.blog_detail', blog_id=blog.id) }}" class="text-light">{{blog.title}}</a></h4>
+                            <p class="text-secondary" style="font-size: 0.9rem;">{{ blog.content[:140] }}...</p>
+                        </div>
+                        <div class="mt-4 pt-3 border-top border-color d-flex justify-content-between text-unmuted" style="font-size: 0.8rem;">
+                            <span><i class="fa-solid fa-clock me-1"></i> {{ blog.read_time }} min read</span>
+                            <span>{{ blog.created_at.strftime('%d %b %Y') }}</span>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- 6. FAQs -->
+<section class="faq-section bg-transparent">
+    <div class="container">
+        <div class="text-center mb-5" data-aos="fade-up">
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <p class="text-secondary">Have questions? We have answers. Find general platform guidelines below.</p>
+        </div>
+        
+        <div class="faq-accordion accordion mx-auto" style="max-width: 800px;" id="faqAccordion">
+            <div class="accordion-item" data-aos="fade-up" data-aos-delay="100">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                        How does the Career Assessment engine calculate matching percentages?
+                    </button>
+                </h2>
+                <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        The compatibility algorithm maps your 45 quiz answers to score weights across each of the 26 career templates. It then applies boost metrics corresponding to your academic department and your existing portfolio skills, normalizing the final compatibility between 30% and 98%.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="accordion-item" data-aos="fade-up" data-aos-delay="200">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                        Can I switch my target career pathway at any point?
+                    </button>
+                </h2>
+                <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        Absolutely. Even if the quiz recommends a specific top role, you can compare other profiles in the Compare widget, access their roadmaps, analyze specific skill gaps, and track job readiness for any of the 26 listed career pathways.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="accordion-item" data-aos="fade-up" data-aos-delay="300">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                        How is the Job Readiness Score calculated?
+                    </button>
+                </h2>
+                <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        It's calculated on a 100-point scale: 30% for verified skill proficiencies, 20% for completed project links, 15% for assessment compatibility, 15% for completed certifications, and 20% for having a completed profile portfolio (LinkedIn profile, GitHub, bio) and resume layout.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 7. Contact Section -->
+<section class="contact-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-5 mb-5 mb-lg-0" data-aos="fade-right">
+                <h2 class="section-title">Connect With Us</h2>
+                <p class="text-secondary">Have additional questions, academic suggestions, or partnerships proposals? Send us a message and our advisors will reply within 24 hours.</p>
+                <div class="mt-4">
+                    <p class="text-secondary"><i class="fa-solid fa-envelope text-primary me-2"></i> support@dreamcareer.edu</p>
+                    <p class="text-secondary"><i class="fa-solid fa-phone text-primary me-2"></i> +91 98765 43210</p>
+                </div>
+            </div>
+<!-- 7. Contact Section --           
+            <div class="col-lg-7" data-aos="fade-left">
+                <form action="{{ url_for('main.contact') }}" method="POST" class="glass-card">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-secondary" style="font-size: 0.9rem;">Full Name</label>
+                            <input type="text" name="name" class="form-control-custom" placeholder="Mufthiha Rahima" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-secondary" style="font-size: 0.9rem;">Email Address</label>
+                            <input type="email" name="email" class="form-control-custom" placeholder="Rahima@example.com" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-secondary" style="font-size: 0.9rem;">Your Message</label>
+                        <textarea name="message" rows="4" class="form-control-custom" placeholder="Type your query..." required></textarea>
+                    </div>
+                    <button type="submit" class="glow-btn w-100 py-3"><i class="fa-solid fa-paper-plane"></i> Send Message</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+>
+<!-- Footer -->
+<footer class="py-5 border-top border-color bg-transparent text-center">
+    <div class="container">
+        <p class="text-secondary mb-2">&copy; 2026 Dream Career Explorer Platform.</p>
+        <div class="d-flex justify-content-center gap-3 text-secondary" style="font-size: 0.9rem;">
+            <a href="{{ url_for('main.careers') }}" class="text-secondary">Explore Careers</a> &bull;
+            <a href="{{ url_for('main.trends') }}" class="text-secondary">Trends</a> &bull;
+            <a href="{{ url_for('main.blogs') }}" class="text-secondary">Articles</a>
+        </div>
+    </div>
+</footer>
+{% endblock %}

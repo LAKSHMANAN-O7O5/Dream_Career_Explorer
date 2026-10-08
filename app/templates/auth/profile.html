@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}My Profile - Dream Career Explorer{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8" data-aos="fade-up">
+            <div class="glass-card">
+                <div class="d-flex align-items-center gap-4 mb-4 pb-3 border-bottom border-color">
+                    <img src="{{ url_for('static', filename='uploads/' + user.profile_pic) }}" alt="Avatar" width="90" height="90" class="rounded-circle border border-primary p-1" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3135/3135715.png';">
+                    <div>
+                        <h3 class="fw-bold mb-1">{{ user.full_name }}</h3>
+                        <p class="text-secondary mb-0"><i class="fa-solid fa-envelope me-2 text-primary"></i> {{ user.email }}</p>
+                        <span class="badge-custom badge-tech mt-2 text-uppercase"><i class="fa-solid fa-id-card"></i> {{ user.role }}</span>
+                    </div>
+                </div>
+                
+                <h4 class="fw-bold mb-3"><i class="fa-solid fa-user-gear text-primary me-2"></i> Edit Profile Information</h4>
+                
+                <form action="{{ url_for('auth.profile') }}" method="POST" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-secondary">Full Name</label>
+                            <input type="text" name="full_name" class="form-control-custom" value="{{ user.full_name }}" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-secondary">Username</label>
+                            <input type="text" class="form-control-custom" value="{{ user.username }}" disabled>
+                            <div class="form-text text-muted">Usernames cannot be changed.</div>
+                        </div>
+                    </div>
+                    
+                    <div class="row mt-2">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-secondary">Academic Department</label>
+                            <input type="text" name="department" class="form-control-custom" placeholder="e.g. Computer Science, Mechanical Engineering" value="{{ user.department or '' }}">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-secondary">Qualification</label>
+                            <input type="text" name="qualification" class="form-control-custom" placeholder="e.g. B.Tech, M.CA, Diploma" value="{{ user.qualification or '' }}">
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label text-secondary">Update Profile Photo</label>
+                        <input type="file" name="profile_pic" class="form-control-custom bg-transparent text-light border-color" accept="image/*">
+                        <div class="form-text text-secondary">Supports PNG, JPG, JPEG, GIF. Max file size: 5MB.</div>
+                    </div>
+                    
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="glow-btn px-4 py-3"><i class="fa-solid fa-floppy-disk"></i> Save Profile Changes</button>
+                        {% if user.role == 'student' %}
+                            <a href="{{ url_for('student.dashboard') }}" class="btn btn-outline-secondary px-4 py-3 border-color text-light">Cancel</a>
+                        {% else %}
+                            <a href="{{ url_for('admin.dashboard') }}" class="btn btn-outline-secondary px-4 py-3 border-color text-light">Cancel</a>
+                        {% endif %}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

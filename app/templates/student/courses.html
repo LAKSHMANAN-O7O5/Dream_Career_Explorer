@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+
+{% block title %}Recommended Courses & Resources - Dream Career Explorer{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Header Hero -->
+    <div class="row mb-4" data-aos="fade-down">
+        <div class="col-12">
+            <div class="glass-card" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, var(--bg-card) 100%);">
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+                    <div>
+                        <span class="badge-custom badge-tech mb-2"><i class="fa-solid fa-graduation-cap"></i> Curated Resources</span>
+                        <h2 class="fw-bold mb-1">Study Guide: {{ career.title }}</h2>
+                        <p class="text-secondary mb-0">Bridging skill gaps with direct external resources and tutorials.</p>
+                    </div>
+                    <div>
+                        <a href="{{ url_for('main.career_detail', career_id=career.id) }}" class="btn btn-outline-secondary btn-sm text-light border-color"><i class="fa-solid fa-arrow-left"></i> Career Overview</a>
+                        <a href="{{ url_for('student.roadmap', career_id=career.id) }}" class="btn btn-outline-primary btn-sm border-color" style="color: var(--primary);"><i class="fa-solid fa-diagram-project"></i> Learning Roadmap</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Course Panels Grid -->
+    <div class="row g-4">
+        <!-- 1. Free & Paid MOOC Courses -->
+        <div class="col-md-6" data-aos="fade-up" data-aos-delay="100">
+            <div class="glass-card h-100">
+                <h5 class="fw-bold text-light mb-4"><i class="fa-solid fa-graduation-cap text-primary me-2"></i> Structured Courses</h5>
+                
+                <div class="d-flex flex-column gap-3">
+                    <!-- Free Courses -->
+                    <h6 class="text-secondary fw-bold" style="font-size: 0.75rem; letter-spacing: 1px; margin-bottom: 5px;">FREE COURSES</h6>
+                    {% for c in grouped.free_courses %}
+                        <div class="p-3 rounded border border-color bg-transparent d-flex justify-content-between align-items-center">
+                            <div>
+                                <span class="badge-custom badge-success mb-1" style="font-size: 0.65rem;">{{ c.platform_name }}</span>
+                                <h6 class="fw-bold text-light mb-1">{{ c.title }}</h6>
+                                <span class="text-secondary" style="font-size: 0.75rem;">Difficulty: <span class="text-light">{{ c.level.capitalize() }}</span></span>
+                            </div>
+                            <a href="{{ c.link }}" target="_blank" class="btn btn-outline-primary btn-sm border-color text-primary"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                        </div>
+                    {% endfor %}
+
+                    <!-- Paid Courses -->
+                    <h6 class="text-secondary fw-bold mt-2" style="font-size: 0.75rem; letter-spacing: 1px; margin-bottom: 5px;">PAID CERTIFICATES</h6>
+                    {% for c in grouped.paid_courses %}
+                        <div class="p-3 rounded border border-color bg-transparent d-flex justify-content-between align-items-center">
+                            <div>
+                                <span class="badge-custom badge-warning mb-1" style="font-size: 0.65rem;">{{ c.platform_name }}</span>
+                                <h6 class="fw-bold text-light mb-1">{{ c.title }}</h6>
+                                <span class="text-secondary" style="font-size: 0.75rem;">Difficulty: <span class="text-light">{{ c.level.capitalize() }}</span></span>
+                            </div>
+                            <a href="{{ c.link }}" target="_blank" class="btn btn-outline-primary btn-sm border-color text-primary"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. Tutorials & Documentation -->
+        <div class="col-md-6" data-aos="fade-up" data-aos-delay="200">
+            <div class="glass-card h-100">
+                <h5 class="fw-bold text-light mb-4"><i class="fa-solid fa-circle-play text-primary me-2"></i> Tutorials & Documentation</h5>
+                
+                <div class="d-flex flex-column gap-3">
+                    <!-- YouTube Tutorials -->
+                    <h6 class="text-secondary fw-bold" style="font-size: 0.75rem; letter-spacing: 1px; margin-bottom: 5px;">YOUTUBE PLAYLISTS</h6>
+                    {% for c in grouped.youtube_tutorials %}
+                        <div class="p-3 rounded border border-color bg-transparent d-flex justify-content-between align-items-center">
+                            <div>
+                                <span class="badge bg-danger mb-1" style="font-size: 0.65rem;">{{ c.platform_name }}</span>
+                                <h6 class="fw-bold text-light mb-1">{{ c.title }}</h6>
+                                <span class="text-secondary" style="font-size: 0.75rem;">Difficulty: <span class="text-light">{{ c.level.capitalize() }}</span></span>
+                            </div>
+                            <a href="{{ c.link }}" target="_blank" class="btn btn-outline-primary btn-sm border-color text-primary"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                        </div>
+                    {% endfor %}
+
+                    <!-- Documentation & Reference Sites -->
+                    <h6 class="text-secondary fw-bold mt-2" style="font-size: 0.75rem; letter-spacing: 1px; margin-bottom: 5px;">OFFICIAL DOCUMENTATION</h6>
+                    {% for c in grouped.documentation %}
+                        <div class="p-3 rounded border border-color bg-transparent d-flex justify-content-between align-items-center">
+                            <div>
+                                <span class="badge bg-info mb-1" style="font-size: 0.65rem;">{{ c.platform_name }}</span>
+                                <h6 class="fw-bold text-light mb-1">{{ c.title }}</h6>
+                                <span class="text-secondary" style="font-size: 0.75rem;">Difficulty: <span class="text-light">{{ c.level.capitalize() }}</span></span>
+                            </div>
+                            <a href="{{ c.link }}" target="_blank" class="btn btn-outline-primary btn-sm border-color text-primary"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Practice & Books Row -->
+    <div class="row g-4 mt-2">
+        <!-- Practice platforms -->
+        <div class="col-md-6" data-aos="fade-up" data-aos-delay="300">
+            <div class="glass-card">
+                <h5 class="fw-bold text-light mb-4"><i class="fa-solid fa-code text-primary me-2"></i> Coding & Practice Platforms</h5>
+                
+                <div class="d-flex flex-column gap-3">
+                    {% for c in grouped.coding_platforms %}
+                        <div class="p-3 rounded border border-color bg-transparent d-flex justify-content-between align-items-center">
+                            <div>
+                                <span class="badge bg-success mb-1" style="font-size: 0.65rem;">{{ c.platform_name }}</span>
+                                <h6 class="fw-bold text-light mb-1">{{ c.title }}</h6>
+                                <span class="text-secondary" style="font-size: 0.75rem;">Difficulty: <span class="text-light">{{ c.level.capitalize() }}</span></span>
+                            </div>
+                            <a href="{{ c.link }}" target="_blank" class="btn btn-outline-primary btn-sm border-color text-primary"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Books and textbooks -->
+        <div class="col-md-6" data-aos="fade-up" data-aos-delay="400">
+            <div class="glass-card">
+                <h5 class="fw-bold text-light mb-4"><i class="fa-solid fa-book text-primary me-2"></i> Recommended Books</h5>
+                
+                <div class="d-flex flex-column gap-3">
+                    {% for c in grouped.books %}
+                        <div class="p-3 rounded border border-color bg-transparent d-flex justify-content-between align-items-center">
+                            <div>
+                                <span class="badge bg-dark border border-color text-light mb-1" style="font-size: 0.65rem;">{{ c.platform_name }}</span>
+                                <h6 class="fw-bold text-light mb-1">{{ c.title }}</h6>
+                                <span class="text-secondary" style="font-size: 0.75rem;">Difficulty: <span class="text-light">{{ c.level.capitalize() }}</span></span>
+                            </div>
+                            <a href="{{ c.link }}" target="_blank" class="btn btn-outline-primary btn-sm border-color text-primary"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

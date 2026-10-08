@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block title %}Learning Roadmap: {{ career.title }} - Dream Career Explorer{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Header Hero -->
+    <div class="row mb-4" data-aos="fade-down">
+        <div class="col-12">
+            <div class="glass-card" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, var(--bg-card) 100%);">
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+                    <div>
+                        <span class="badge-custom badge-tech mb-2"><i class="fa-solid fa-diagram-project"></i> Path Structures</span>
+                        <h2 class="fw-bold mb-1">{{ career.title }} Roadmap</h2>
+                        <p class="text-secondary mb-0">Follow this step-by-step career pathway and check off milestones as you master them.</p>
+                    </div>
+                    <div>
+                        <a href="{{ url_for('main.career_detail', career_id=career.id) }}" class="btn btn-outline-secondary btn-sm text-light border-color"><i class="fa-solid fa-arrow-left"></i> Career Details</a>
+                        <a href="{{ url_for('student.courses', career_id=career.id) }}" class="glow-btn btn-sm"><i class="fa-solid fa-graduation-cap"></i> Courses & Books</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Timeline Wrapper -->
+    <div class="row">
+        <div class="col-lg-8 mx-auto" data-aos="fade-up">
+            <div class="glass-card">
+                <h5 class="fw-bold mb-4"><i class="fa-solid fa-list-check text-primary me-2"></i> Interactive Milestone Checklist</h5>
+                
+                <div class="roadmap-timeline">
+                    {% for stage in stages %}
+                        <div class="roadmap-node {% if progress[stage.id] == 'completed' %}completed{% elif progress[stage.id] == 'in_progress' %}in_progress{% endif %}" id="node_{{ stage.id }}">
+                            <div class="glass-card p-3 ms-2 mb-3 border-color" style="background: rgba(255, 255, 255, 0.015);">
+                                <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-start gap-2 mb-2">
+                                    <div>
+                                        <span class="badge bg-secondary mb-2" style="font-size: 0.7rem;">Step {{ stage.stage_order }}</span>
+                                        <h5 class="fw-bold text-light mb-1">{{ stage.stage_name }}</h5>
+                                    </div>
+                                    
+                                    <!-- Interactive Toggler Button -->
+                                    <button class="btn btn-sm px-3 py-2 border-color text-light roadmap-toggle-btn" 
+                                        style="font-size: 0.75rem;" 
+                                        data-career="{{ career.id }}" 
+                                        data-stage="{{ stage.id }}" 
+                                        id="btn_{{ stage.id }}">
+                                        {% if progress[stage.id] == 'completed' %}
+                                            <i class="fa-solid fa-circle-check text-success me-1"></i> Completed
+                                        {% elif progress[stage.id] == 'in_progress' %}
+                                            <i class="fa-solid fa-circle-half-stroke text-warning me-1"></i> In Progress
+                                        {% else %}
+                                            <i class="fa-regular fa-circle text-muted me-1"></i> Mark In Progress
+                                        {% endif %}
+                                    </button>
+                                </div>
+                                <p class="text-secondary mb-3" style="font-size: 0.9rem; line-height: 1.5;">{{ stage.description }}</p>
+                                
+                                {% if stage.recommended_resources %}
+                                    <div class="p-2 rounded border border-color" style="background: rgba(0, 0, 0, 0.15); font-size: 0.8rem;">
+                                        <span class="text-secondary fw-bold text-uppercase d-block mb-1" style="font-size: 0.65rem; letter-spacing: 0.5px;">Recommended Resources</span>
+                                        <span class="text-light"><i class="fa-solid fa-link text-primary me-2"></i> {{ stage.recommended_resources }}</span>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const toggleBtns = document.querySelectorAll('.roadmap-toggle-btn');
+    
+    toggleBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const careerId = btn.getAttribute('data-career');
+            const stageId = btn.getAttribute('data-stage');
+            
+            fetch(`/student/roadmap/${careerId}/toggle/${stageId}`, {
+                method: 'POST'
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    const node = document.getElementById(`node_${stageId}`);
+                    
+                    if (data.new_status === 'completed') {
+                        node.className = 'roadmap-node completed';
+                        btn.innerHTML = '<i class="fa-solid fa-circle-check text-success me-1"></i> Completed';
+                    } else if (data.new_status === 'in_progress') {
+                        node.className = 'roadmap-node in_progress';
+                        btn.innerHTML = '<i class="fa-solid fa-circle-half-stroke text-warning me-1"></i> In Progress';
+                    } else {
+                        node.className = 'roadmap-node';
+                        btn.innerHTML = '<i class="fa-regular fa-circle text-muted me-1"></i> Mark In Progress';
+                    }
+                }
+            })
+            .catch(err => console.error("Error toggling roadmap stage:", err));
+        });
+    });
+});
+</script>
+{% endblock %}

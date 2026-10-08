@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}Career Assessment Quiz - Dream Career Explorer{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-9" data-aos="fade-up">
+            
+            <!-- Quiz Step Indicator -->
+            <div class="glass-card mb-4 p-4 text-center">
+                <h4 class="fw-bold mb-3"><i class="fa-solid fa-wand-magic-sparkles text-primary me-2"></i> Career Compatibility Wizard</h4>
+                <p class="text-secondary mb-4" style="font-size: 0.95rem;">Answer all questions honestly to calculate compatibility with 26 industry careers.</p>
+                
+                <!-- Progress Line Nodes -->
+                <div class="step-indicator-wrapper px-3">
+                    <div class="step-indicator-line"></div>
+                    <div class="step-indicator-progress" id="step-progress" style="width: 0%;"></div>
+                    
+                    <!-- 9 step nodes since 45 questions / 5 = 9 steps -->
+                    {% for i in range(9) %}
+                        <div class="step-node {% if i == 0 %}active{% endif %}" data-step="{{ i }}">
+                            {{ i + 1 }}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Quiz Wizard Card -->
+            <div class="glass-card p-4" id="assessment-wizard-card">
+                <form id="quiz-form" action="{{ url_for('student.assessment') }}" method="POST">
+                    
+                    {% for q in questions %}
+                        <!-- Opening step container for every 5 questions -->
+                        {% if loop.index0 % 5 == 0 %}
+                            <div class="quiz-step {% if loop.index0 == 0 %}active{% endif %}" id="step_container_{{ loop.index0 // 5 }}">
+                                <h5 class="text-primary fw-bold mb-4 border-bottom border-color pb-2"><i class="fa-solid fa-list-check me-2"></i> Section {{ (loop.index0 // 5) + 1 }} of 9: {{ q.category.replace('_', ' ').capitalize() }}</h5>
+                        {% endif %}
+                        
+                        <!-- Question Item -->
+                        <div class="question-wrapper mb-4 p-3 rounded border border-color" id="q_wrapper_{{ q.id }}">
+                            <p class="fw-bold mb-3" style="font-size: 1.05rem;"><span class="text-primary">Q{{ loop.index }}.</span> {{ q.question_text }}</p>
+                            
+                            <div class="d-flex flex-column gap-2">
+                                {% for opt in q.options %}
+                                    <label class="option-card-label">
+                                        <input type="radio" name="question_{{ q.id }}" value="{{ opt.id }}" class="option-card-input">
+                                        <div class="option-card">
+                                            <span class="option-letter">
+                                                {% if loop.index == 1 %}A{% elif loop.index == 2 %}B{% elif loop.index == 3 %}C{% else %}D{% endif %}
+                                            </span>
+                                            <span class="text-light" style="font-size: 0.95rem;">{{ opt.option_text }}</span>
+                                        </div>
+                                    </label>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <!-- Closing step container -->
+                        {% if (loop.index0 % 5 == 4) or loop.last %}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    <!-- Navigation Buttons -->
+                    <div class="d-flex justify-content-between mt-4 pt-3 border-top border-color">
+                        <button type="button" id="prev-btn" class="btn btn-outline-secondary px-4 py-3 border-color text-light" style="visibility: hidden;">
+                            <i class="fas fa-arrow-left me-2"></i> Back
+                        </button>
+                        <button type="button" id="next-btn" class="glow-btn px-4 py-3">
+                            Next Section <i class="fas fa-arrow-right ms-2"></i>
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+            
+        </div>
+    </div>
+</div>
+{% endblock %}

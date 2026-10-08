@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block title %}
+Manage Quiz - Administrator - Dream Career Explorer
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Header Hero -->
+    <div class="row mb-4" data-aos="fade-down">
+        <div class="col-12">
+            <div class="glass-card" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, var(--bg-card) 100%);">
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+                    <div>
+                        <span class="badge-custom badge-tech mb-2"><i class="fa-solid fa-clipboard-question"></i> Assessment Matrix</span>
+                        <h2 class="fw-bold mb-1">Manage Quiz Questions</h2>
+                        <p class="text-secondary mb-0">Customize assessment items, configure career score weights, and update options mappings.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- 1. Add Question Form -->
+        <div class="col-lg-5" data-aos="fade-right">
+            <div class="glass-card">
+                <h5 class="fw-bold mb-4"><i class="fa-solid fa-square-plus text-primary me-2"></i> Register New Quiz Question</h5>
+                
+                <form action="{{ url_for('admin.manage_quiz') }}" method="POST">
+                    <div class="mb-3">
+                        <label class="form-label text-secondary" style="font-size: 0.9rem;">Question Text</label>
+                        <input type="text" name="question_text" class="form-control-custom" placeholder="e.g. Which environment makes you feel most energized?" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label text-secondary" style="font-size: 0.9rem;">Category Group</label>
+                        <select name="category" class="form-control-custom form-select bg-transparent text-light border-color" required>
+                            <option value="personality" class="bg-dark text-light">Personality Orientations</option>
+                            <option value="technical_interest" class="bg-dark text-light">Technical Interest</option>
+                            <option value="creativity" class="bg-dark text-light">Creativity</option>
+                            <option value="logical_thinking" class="bg-dark text-light">Logical Thinking</option>
+                            <option value="communication" class="bg-dark text-light">Communication</option>
+                            <option value="leadership" class="bg-dark text-light">Leadership</option>
+                            <option value="business" class="bg-dark text-light">Business Inclination</option>
+                            <option value="problem_solving" class="bg-dark text-light">Problem Solving</option>
+                            <option value="mathematics" class="bg-dark text-light">Mathematics</option>
+                            <option value="analytical_skills" class="bg-dark text-light">Analytical Skills</option>
+                        </select>
+                    </div>
+
+                    <hr class="border-color">
+                    <h6 class="text-light fw-bold mb-3"><i class="fa-solid fa-list-ul text-primary me-2"></i> Answers & Score Weights Mapping</h6>
+                    <p class="text-secondary mb-3" style="font-size: 0.8rem;">Provide weights mapping formatting as: <strong>CareerTitle:Weight,CareerTitle:Weight</strong>. Default weight value is 2.</p>
+
+                    <!-- Option 1 -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label text-secondary" style="font-size: 0.85rem;">Option A Text</label>
+                            <input type="text" name="option1" class="form-control-custom m-0" placeholder="e.g. Coding software programs" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-secondary" style="font-size: 0.85rem;">Option A Career Weights</label>
+                            <input type="text" name="option1_weights" class="form-control-custom m-0" placeholder="Software Engineer:4,Data Scientist:3">
+                        </div>
+                    </div>
+
+                    <!-- Option 2 -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label text-secondary" style="font-size: 0.85rem;">Option B Text</label>
+                            <input type="text" name="option2" class="form-control-custom m-0" placeholder="e.g. Managing team schedules" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-secondary" style="font-size: 0.85rem;">Option B Career Weights</label>
+                            <input type="text" name="option2_weights" class="form-control-custom m-0" placeholder="Product Manager:4,HR Specialist:3">
+                        </div>
+                    </div>
+
+                    <!-- Option 3 -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label text-secondary" style="font-size: 0.85rem;">Option C Text (Optional)</label>
+                            <input type="text" name="option3" class="form-control-custom m-0" placeholder="e.g. Designing color schemes">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-secondary" style="font-size: 0.85rem;">Option C Career Weights</label>
+                            <input type="text" name="option3_weights" class="form-control-custom m-0" placeholder="UX UI Designer:4,Graphic Designer:3">
+                        </div>
+                    </div>
+
+                    <!-- Option 4 -->
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label text-secondary" style="font-size: 0.85rem;">Option D Text (Optional)</label>
+                            <input type="text" name="option4" class="form-control-custom m-0" placeholder="e.g. Designing teaching guides">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-secondary" style="font-size: 0.85rem;">Option D Career Weights</label>
+                            <input type="text" name="option4_weights" class="form-control-custom m-0" placeholder="High School Teacher:4">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="glow-btn w-100 py-3"><i class="fa-solid fa-plus-circle"></i> Create Question Model</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- 2. Question list -->
+        <div class="col-lg-7" data-aos="fade-left">
+            <div class="glass-card h-100">
+                <h5 class="fw-bold mb-4"><i class="fa-solid fa-clipboard-list text-primary me-2"></i> Current Quiz Question Register</h5>
+                
+                <div class="d-flex flex-column gap-3" style="max-height: 800px; overflow-y: auto;">
+                    {% for q in questions %}
+                        <div class="p-3 rounded border border-color bg-transparent">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <div>
+                                    <span class="badge-custom badge-tech mb-2" style="font-size: 0.65rem;">Category: {{ q.category.replace('_', ' ').capitalize() }}</span>
+                                    <h6 class="fw-bold text-light mb-1">Q{{ loop.index }}. {{ q.question_text }}</h6>
+                                </div>
+                                <form action="{{ url_for('admin.delete_question', question_id=q.id) }}" method="POST" class="m-0" onsubmit="return confirm('Delete this question model?');">
+                                    <button type="submit" class="btn btn-outline-danger btn-sm border-color" title="Delete Question"><i class="fa-solid fa-trash-can"></i></button>
+                                </form>
+                            </div>
+                            
+                            <ul class="text-secondary mb-0 mt-2 ps-3" style="font-size: 0.85rem;">
+                                {% for opt in q.options %}
+                                    <li><strong>Opt {{ loop.index }}:</strong> {{ opt.option_text }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% else %}
+                        <p class="text-muted text-center py-4">No assessment questions added yet.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

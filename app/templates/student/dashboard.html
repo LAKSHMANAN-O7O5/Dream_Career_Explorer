@@ -1,0 +1,237 @@
+{% extends "base.html" %}
+
+{% block title %}Student Dashboard - Dream Career Explorer{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-2">
+    <!-- 1. Header welcome banner -->
+    <div class="row mb-4">
+        <div class="col-12" data-aos="fade-down">
+            <div class="glass-card d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, var(--bg-card) 100%);">
+                <div>
+                    <h2 class="fw-bold mb-1"><i class="fa-solid fa-graduation-cap text-primary me-2"></i> Welcome back, {{ user.full_name }}!</h2>
+                    <p class="text-secondary mb-0">Track your skills gap, certifications, roadmap milestones, and general readiness status here.</p>
+                </div>
+                <div class="d-flex gap-2">
+                    <a href="{{ url_for('student.assessment') }}" class="glow-btn btn-sm"><i class="fa-solid fa-square-poll-horizontal"></i> Retake Assessment</a>
+                    <a href="{{ url_for('student.portfolio') }}" class="btn btn-outline-secondary btn-sm text-light border-color"><i class="fa-solid fa-user-edit"></i> Edit Portfolio</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. Metrics Widgets Grid -->
+    <div class="row g-4 mb-4">
+        <!-- Circular Match widget -->
+        <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="100">
+            <div class="glass-card text-center h-100 d-flex flex-column justify-content-between">
+                <h5 class="text-secondary fw-bold" style="font-size: 0.9rem; letter-spacing: 1px;">TOP CAREER MATCH</h5>
+                
+                <div class="my-3">
+                    {% if top_career %}
+                        <div class="progress-ring-container" data-pct="{{ top_match_pct }}">
+                            <svg class="progress-ring" width="120" height="120">
+                                <circle class="progress-ring-circle" stroke="var(--primary)" stroke-width="8" fill="transparent" r="50" cx="60" cy="60"/>
+                            </svg>
+                            <div class="progress-ring-text">{{ top_match_pct }}%</div>
+                        </div>
+                        <h5 class="fw-bold mt-3 mb-0">{{ top_career.title }}</h5>
+                    {% else %}
+                        <div class="progress-ring-container" data-pct="0">
+                            <svg class="progress-ring" width="120" height="120">
+                                <circle class="progress-ring-circle" stroke="var(--border-color)" stroke-width="8" fill="transparent" r="50" cx="60" cy="60"/>
+                            </svg>
+                            <div class="progress-ring-text">0%</div>
+                        </div>
+                        <p class="text-danger mt-3 mb-0" style="font-size: 0.9rem;">Quiz Not Taken</p>
+                    {% endif %}
+                </div>
+                
+                <div class="border-top border-color pt-2" style="font-size: 0.8rem;">
+                {% if top_career is defined and top_career %}
+                    <a href="{{ url_for('student.job_readiness', career_id=top_career.id) }}" class="text-primary fw-semibold">
+                        <i class="fa-solid fa-shield-halved me-1"></i> Job Readiness Score
+                    </a>
+                {% else %}
+                    <a href="{{ url_for('student.assessment') }}" class="text-secondary">Take Quiz to unlock match</a>
+                {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Skills counter card -->
+        <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="200">
+            <div class="glass-card text-center h-100 d-flex flex-column justify-content-between">
+                <h5 class="text-secondary fw-bold" style="font-size: 0.9rem; letter-spacing: 1px;">PORTFOLIO SKILLS</h5>
+                <div class="my-3">
+                    <h1 class="display-4 fw-extrabold text-primary m-0">{{ skills_count }}</h1>
+                    <p class="text-secondary mb-0">Total Skills Registered</p>
+                    <span class="badge-custom badge-success mt-2" style="font-size: 0.75rem;">{{ strength_count }} Strengths</span>
+                </div>
+                <div class="border-top border-color pt-2" style="font-size: 0.8rem;">
+                    <a href="{{ url_for('student.portfolio') }}" class="text-primary fw-semibold"><i class="fa-solid fa-list-check me-1"></i> Add / Edit Skills</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Roadmap completion progress -->
+        <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="300">
+            <div class="glass-card text-center h-100 d-flex flex-column justify-content-between">
+                <h5 class="text-secondary fw-bold" style="font-size: 0.9rem; letter-spacing: 1px;">ROADMAP MILESTONES</h5>
+                <div class="my-3 px-2">
+                    <h1 class="display-4 fw-extrabold text-primary m-0">{{ roadmap_pct }}%</h1>
+                    <p class="text-secondary mb-2">Track Completion</p>
+                    <div class="progress bg-secondary" style="height: 6px;">
+                        <div class="progress-bar bg-primary" role="progressbar" data-width="{{ roadmap_pct|default(0) }}" aria-valuenow="{{ roadmap_pct|default(0) }}" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                </div>
+                <div class="border-top border-color pt-2" style="font-size: 0.8rem;">
+                    {% if top_career %}
+                        <a href="{{ url_for('student.roadmap', career_id=top_career.id) }}" class="text-primary fw-semibold"><i class="fa-solid fa-diagram-project me-1"></i> Check Step Roadmap</a>
+                    {% else %}
+                        <a href="{{ url_for('main.careers') }}" class="text-secondary">Explore Career Roadmaps</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Credentials count card -->
+        <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="400">
+            <div class="glass-card text-center h-100 d-flex flex-column justify-content-between">
+                <h5 class="text-secondary fw-bold" style="font-size: 0.9rem; letter-spacing: 1px;">CERTIFICATIONS</h5>
+                <div class="my-3">
+                    <h1 class="display-4 fw-extrabold text-primary m-0">{{ certs_count }}</h1>
+                    <p class="text-secondary mb-0">Verified Certificates</p>
+                    <span class="badge-custom badge-info mt-2" style="font-size: 0.75rem;">{{ projects_count }} Projects Built</span>
+                </div>
+                <div class="border-top border-color pt-2" style="font-size: 0.8rem;">
+                    <a href="{{ url_for('student.certifications') }}" class="text-primary fw-semibold"><i class="fa-solid fa-award me-1"></i> Verify Certificates</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. Analytical Charts Segment -->
+    <div class="row g-4 mb-4">
+        <!-- Skills profile Radar -->
+        <div class="col-lg-6" data-aos="fade-right">
+            <div class="glass-card">
+                <h5 class="fw-bold mb-4"><i class="fa-solid fa-cubes text-primary me-2"></i> Skill Domain Proficiency Map</h5>
+                <div style="height: 320px; position: relative;" class="d-flex align-items-center justify-content-center">
+                    {% if user.skills %}
+                        <canvas id="skillsRadarChart"
+                            data-labels='{{ user.skills | map(attribute="skill_name") | list | tojson }}'
+                            data-values='{{ user.skills | map(attribute="proficiency") | list | tojson }}'>
+                        </canvas>
+                    {% else %}
+                        <div class="text-center text-secondary">
+                            <i class="fa-solid fa-chart-line fs-1 text-muted mb-3"></i>
+                            <p>No skills registered in your portfolio yet.</p>
+                            <a href="{{ url_for('student.portfolio') }}" class="btn btn-outline-secondary border-color text-light btn-sm"><i class="fa-solid fa-plus"></i> Add First Skill</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Career Matches list Polar -->
+        <div class="col-lg-6" data-aos="fade-left">
+            <div class="glass-card">
+                <h5 class="fw-bold mb-4"><i class="fa-solid fa-circle-nodes text-primary me-2"></i> Top Career Compatibility Analysis</h5>
+                <div style="height: 320px; position: relative;" class="d-flex align-items-center justify-content-center">
+                    {% if recommended_careers %}
+                        <canvas id="careerMatchesPieChart"
+                            data-labels='[{% for item in recommended_careers[:5] %}{{ item.career.title | tojson }}{% if not loop.last %},{% endif %}{% endfor %}]'
+                            data-values='[{% for item in recommended_careers[:5] %}{{ item.match_pct | tojson }}{% if not loop.last %},{% endif %}{% endfor %}]'>
+                        </canvas>
+                    {% else %}
+                        <div class="text-center text-secondary">
+                            <i class="fa-solid fa-square-poll-horizontal fs-1 text-muted mb-3"></i>
+                            <p>Take the Career Assessment Quiz to compute matches.</p>
+                            <a href="{{ url_for('student.assessment') }}" class="glow-btn btn-sm"><i class="fa-solid fa-wand-magic-sparkles"></i> Take Quiz Now</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. Recommended Careers Catalog & Goals Row -->
+    <div class="row g-4">
+        <!-- Matches list details -->
+        <div class="col-lg-8" data-aos="fade-up">
+            <div class="glass-card">
+                <h5 class="fw-bold mb-4"><i class="fa-solid fa-compass text-primary me-2"></i> Detailed Career Matches</h5>
+                
+                {% if recommended_careers %}
+                    <div class="row g-3">
+                        {% for item in recommended_careers %}
+                            <div class="col-md-6">
+                                <div class="glass-card p-3 border-color h-100 d-flex flex-column justify-content-between" style="background: rgba(255, 255, 255, 0.01);">
+                                    <div>
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <h6 class="fw-bold text-light mb-0">{{ item.career.title }}</h6>
+                                            <span class="badge-custom badge-success" style="font-size: 0.7rem;">{{ item.match_pct }}% Match</span>
+                                        </div>
+                                        <p class="text-secondary mb-3" style="font-size: 0.85rem;">{{ item.career.overview[:120] }}...</p>
+                                    </div>
+                                    <div class="d-flex gap-2 mt-2 pt-2 border-top border-color">
+                                        <a href="{{ url_for('main.career_detail', career_id=item.career.id) }}" class="btn btn-outline-secondary btn-sm text-light border-color" style="font-size: 0.75rem;">Details</a>
+                                        <a href="{{ url_for('student.roadmap', career_id=item.career.id) }}" class="btn btn-outline-primary btn-sm border-color" style="font-size: 0.75rem; color: var(--primary);">Roadmap</a>
+                                        <a href="{{ url_for('student.job_readiness', career_id=item.career.id) }}" class="btn btn-outline-success btn-sm border-color" style="font-size: 0.75rem; color: var(--success);">Readiness</a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="text-center py-5">
+                        <p class="text-secondary">Quiz results will generate match matrices here.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Goals & Targets -->
+        <div class="col-lg-4" data-aos="fade-up" data-aos-delay="200">
+            <div class="glass-card h-100">
+                <h5 class="fw-bold mb-4"><i class="fa-solid fa-list-check text-primary me-2"></i> Upcoming learning goals</h5>
+                
+                <div class="d-flex flex-column gap-3">
+                    <div class="p-3 rounded border-color border d-flex gap-3 align-items-center" style="background: rgba(255,255,255,0.01);">
+                        <i class="fa-solid fa-square-check fs-4 {% if latest_result %}text-success{% else %}text-muted{% endif %}"></i>
+                        <div>
+                            <h6 class="fw-bold mb-0" style="font-size: 0.9rem;">Complete Career Assessment</h6>
+                            <p class="text-secondary mb-0" style="font-size: 0.75rem;">Discover compatibility mapping</p>
+                        </div>
+                    </div>
+
+                    <div class="p-3 rounded border-color border d-flex gap-3 align-items-center" style="background: rgba(255,255,255,0.01);">
+                        <i class="fa-solid fa-square-check fs-4 {% if skills_count >= 5 %}text-success{% else %}text-muted{% endif %}"></i>
+                        <div>
+                            <h6 class="fw-bold mb-0" style="font-size: 0.9rem;">Register 5 Core Skills</h6>
+                            <p class="text-secondary mb-0" style="font-size: 0.75rem;">Build domain profile mapping</p>
+                        </div>
+                    </div>
+
+                    <div class="p-3 rounded border-color border d-flex gap-3 align-items-center" style="background: rgba(255,255,255,0.01);">
+                        <i class="fa-solid fa-square-check fs-4 {% if projects_count >= 1 %}text-success{% else %}text-muted{% endif %}"></i>
+                        <div>
+                            <h6 class="fw-bold mb-0" style="font-size: 0.9rem;">Upload 1 Capstone Project</h6>
+                            <p class="text-secondary mb-0" style="font-size: 0.75rem;">Demonstrate technical hands-on ability</p>
+                        </div>
+                    </div>
+
+                    <div class="p-3 rounded border-color border d-flex gap-3 align-items-center" style="background: rgba(255,255,255,0.01);">
+                        <i class="fa-solid fa-square-check fs-4 {% if certs_count >= 1 %}text-success{% else %}text-muted{% endif %}"></i>
+                        <div>
+                            <h6 class="fw-bold mb-0" style="font-size: 0.9rem;">Add 1 Industry Certificate</h6>
+                            <p class="text-secondary mb-0" style="font-size: 0.75rem;">Earn validated industry credentials</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

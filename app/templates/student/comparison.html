@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+
+{% block title %}Career Comparison Matrix - Dream Career Explorer{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Header Hero -->
+    <div class="row mb-4" data-aos="fade-down">
+        <div class="col-12">
+            <div class="glass-card" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, var(--bg-card) 100%);">
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+                    <div>
+                        <span class="badge-custom badge-tech mb-2"><i class="fa-solid fa-scale-balanced"></i> Decisive Node</span>
+                        <h2 class="fw-bold mb-1">Career Comparison Matrix</h2>
+                        <p class="text-secondary mb-0">Select two career paths from the selectors below to compare salary metrics, tools, and future scope.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Career Selection form -->
+    <div class="row mb-4" data-aos="fade-up">
+        <div class="col-12">
+            <form action="{{ url_for('main.comparison') }}" method="GET" class="glass-card">
+                <div class="row align-items-end g-3">
+                    <div class="col-md-5">
+                        <label class="form-label text-secondary" style="font-size: 0.9rem;">Select Pathway 1</label>
+                        <select name="c1" class="form-control-custom form-select bg-transparent text-light border-color" required>
+                            <option value="" class="bg-dark text-muted">-- Choose First Career --</option>
+                            {% for c in careers %}
+                                <option value="{{ c.id }}" class="bg-dark text-light" {% if c1 and c1.id == c.id %}selected{% endif %}>{{ c.title }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div class="col-md-2 text-center pb-2">
+                        <span class="badge bg-secondary p-2 fs-6">VS</span>
+                    </div>
+
+                    <div class="col-md-5">
+                        <label class="form-label text-secondary" style="font-size: 0.9rem;">Select Pathway 2</label>
+                        <select name="c2" class="form-control-custom form-select bg-transparent text-light border-color" required>
+                            <option value="" class="bg-dark text-muted">-- Choose Second Career --</option>
+                            {% for c in careers %}
+                                <option value="{{ c.id }}" class="bg-dark text-light" {% if c2 and c2.id == c.id %}selected{% endif %}>{{ c.title }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="col-12 mt-3">
+                        <button type="submit" class="glow-btn w-100 py-3"><i class="fa-solid fa-scale-balanced"></i> Compare Careers</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Comparison Matrix Table -->
+    {% if c1 and c2 %}
+        <div class="row" data-aos="fade-up">
+            <div class="col-12">
+                <div class="glass-card p-0 overflow-hidden">
+                    <table class="table table-dark table-striped table-hover border-color mb-0 align-middle">
+                        <thead>
+                            <tr style="border-bottom: 2px solid var(--border-color);">
+                                <th scope="col" style="width: 20%;" class="ps-4 py-3 text-secondary">METRICS</th>
+                                <th scope="col" style="width: 40%;" class="py-3 text-primary fw-bold text-center fs-5">{{ c1.title }}</th>
+                                <th scope="col" style="width: 40%;" class="py-3 text-success fw-bold text-center fs-5">{{ c2.title }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Overview -->
+                            <tr>
+                                <td class="ps-4 fw-bold text-secondary">Overview</td>
+                                <td class="p-3 text-secondary" style="font-size: 0.9rem; text-align: justify; line-height: 1.5;">{{ c1.overview[:250] }}...</td>
+                                <td class="p-3 text-secondary" style="font-size: 0.9rem; text-align: justify; line-height: 1.5;">{{ c2.overview[:250] }}...</td>
+                            </tr>
+                            <!-- Avg Salary India -->
+                            <tr>
+                                <td class="ps-4 fw-bold text-secondary">Avg Salary (IN)</td>
+                                <td class="p-3 text-center text-light fw-bold fs-6">{{ c1.average_salary_in }}</td>
+                                <td class="p-3 text-center text-light fw-bold fs-6">{{ c2.average_salary_in }}</td>
+                            </tr>
+                            <!-- Avg Salary Intl -->
+                            <tr>
+                                <td class="ps-4 fw-bold text-secondary">Avg Salary (Global)</td>
+                                <td class="p-3 text-center text-light fw-bold fs-6">{{ c1.average_salary_intl }}</td>
+                                <td class="p-3 text-center text-light fw-bold fs-6">{{ c2.average_salary_intl }}</td>
+                            </tr>
+                            <!-- Future growth -->
+                            <tr>
+                                <td class="ps-4 fw-bold text-secondary">Job Growth Rate</td>
+                                <td class="p-3 text-center text-light"><span class="badge bg-primary p-2">{{ c1.growth_rate }}</span></td>
+                                <td class="p-3 text-center text-light"><span class="badge bg-success p-2">{{ c2.growth_rate }}</span></td>
+                            </tr>
+                            <!-- Department 
+                            <tr>
+                                <td class="ps-4 fw-bold text-secondary">Department Focus</td>
+                                <td class="p-3 text-center text-secondary">{{ c1.department }}</td>
+                                <td class="p-3 text-center text-secondary">{{ c2.department }}</td>
+                            </tr> -->
+                            <!-- Core Skills -->
+                            <tr>
+                                <td class="ps-4 fw-bold text-secondary">Core Skills</td>
+                                <td class="p-3">
+                                    <div class="d-flex flex-wrap justify-content-center gap-1">
+                                        {% for sk in c1.skills_required %}
+                                            <span class="badge-custom badge-tech" style="font-size: 0.75rem;">{{ sk.skill_name }}</span>
+                                        {% endfor %}
+                                    </div>
+                                </td>
+                                <td class="p-3">
+                                    <div class="d-flex flex-wrap justify-content-center gap-1">
+                                        {% for sk in c2.skills_required %}
+                                            <span class="badge-custom badge-success" style="font-size: 0.75rem;">{{ sk.skill_name }}</span>
+                                        {% endfor %}
+                                    </div>
+                                </td>
+                            </tr>
+                            <!-- Action Paths -->
+                            <tr style="border-top: 2px solid var(--border-color);">
+                                <td class="ps-4 fw-bold text-secondary">Direct Action</td>
+                                <td class="p-3 text-center">
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <a href="{{ url_for('main.career_detail', career_id=c1.id) }}" class="btn btn-outline-primary btn-sm border-color">Details</a>
+                                        <a href="{{ url_for('student.roadmap', career_id=c1.id) }}" class="btn btn-primary btn-sm border-color" style="background: var(--primary);">Roadmap</a>
+                                    </div>
+                                </td>
+                                <td class="p-3 text-center">
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <a href="{{ url_for('main.career_detail', career_id=c2.id) }}" class="btn btn-outline-success btn-sm border-color" style="color: var(--success);">Details</a>
+                                        <a href="{{ url_for('student.roadmap', career_id=c2.id) }}" class="btn btn-success btn-sm border-color" style="background: var(--success);">Roadmap</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

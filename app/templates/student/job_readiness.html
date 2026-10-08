@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+
+{% block title %}Job Readiness Score: {{ career.title | default('Career') }} - Dream Career Explorer{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row mb-4" data-aos="fade-down">
+        <div class="col-12">
+            <div class="glass-card" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, var(--bg-card) 100%);">
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+                    <div>
+                        <span class="badge-custom badge-tech mb-2"><i class="fa-solid fa-shield-halved"></i> Audit Center</span>
+                        <h2 class="fw-bold mb-1">Job Readiness Tracker</h2>
+                        <p class="text-secondary mb-0">Target Profile: <strong>{{career.title | default('N/A')}}</strong>. A comprehensive audit checking your eligibility for hire.</p>
+                    </div>
+                    <div>
+                      {% if career is defined %}
+<a href="{{ url_for('student.skill_gap', career_id=career.id) }}" class="btn btn-outline-secondary btn-sm text-light border-color">Skill Gap</a>
+<a href="{{ url_for('student.roadmap', career_id=career.id) }}" class="glow-btn btn-sm">Road Map</a>
+{% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-4">
+        <div class="col-lg-4" data-aos="fade-right">
+            <div class="glass-card text-center h-100 d-flex flex-column justify-content-center py-5">
+                <h5 class="text-secondary fw-bold mb-3" style="font-size: 0.9rem; letter-spacing: 1px;">AGGREGATE AUDIT</h5>
+                <h1 class="display-1 fw-extrabold m-0 {% if (readiness_score | default(0)) >= 80 %}text-success{% elif (readiness_score | default(0)) >= 50 %}text-warning{% else %}text-danger{% endif %}">
+                    {{ readiness_score | default(0) }}
+                </h1>
+                <p class="text-secondary mt-1">out of 100 total points</p>
+                <div class="progress mx-auto mt-3 bg-secondary" style="height: 8px; max-width: 200px;">
+                    <div class="progress-bar {% if (readiness_score | default(0)) >= 80 %}bg-success{% elif (readiness_score | default(0)) >= 50 %}bg-warning{% else %}bg-danger{% endif %}" role="progressbar" style="width: {{ readiness_score | default(0) }}%;"></div>
+                </div>
+                <div class="mt-4">
+                    {% if (readiness_score | default(0)) >= 80 %}
+                        <span class="badge-custom badge-success"><i class="fa-solid fa-circle-check"></i> Industry Ready</span>
+                    {% elif (readiness_score | default(0)) >= 50 %}
+                        <span class="badge-custom badge-warning"><i class="fa-solid fa-triangle-exclamation"></i> Intermediate Prep</span>
+                    {% else %}
+                        <span class="badge-custom badge-danger"><i class="fa-solid fa-circle-xmark"></i> Beginner Phase</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-8" data-aos="fade-left">
+            <div class="glass-card h-100">
+                <h5 class="fw-bold mb-4"><i class="fa-solid fa-cubes text-primary me-2"></i> Audit Parameters & Category Breakdown</h5>
+
+                <div class="d-flex flex-column gap-3">
+                    <div>
+                        <div class="d-flex justify-content-between text-secondary mb-1" style="font-size: 0.85rem;">
+                            <span><i class="fa-solid fa-laptop-code text-primary me-2"></i> Verified Technical Skills (30% Weight)</span>
+                            <span class="text-light fw-bold">{{ score_breakdown.skills_score | default(0) }} / 30 pts</span>
+                        </div>
+                        <div class="progress bg-secondary" style="height: 6px;">
+                            <div class="progress-bar bg-primary" role="progressbar" style="width: {{ ((score_breakdown.skills_score | default(0)) / 30) * 100 }}%;"></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="d-flex justify-content-between text-secondary mb-1" style="font-size: 0.85rem;">
+                            <span><i class="fa-solid fa-code-fork text-primary me-2"></i> Portfolio Capstone Projects (20% Weight)</span>
+                            <span class="text-light fw-bold">{{ score_breakdown.projects_score | default(0) }} / 20 pts</span>
+                        </div>
+                        <div class="progress bg-secondary" style="height: 6px;">
+                            <div class="progress-bar bg-primary" role="progressbar" style="width: {{ ((score_breakdown.projects_score | default(0)) / 20) * 100 }}%;"></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="d-flex justify-content-between text-secondary mb-1" style="font-size: 0.85rem;">
+                            <span><i class="fa-solid fa-square-poll-horizontal text-primary me-2"></i> Quiz Compatibility Score (15% Weight)</span>
+                            <span class="text-light fw-bold">{{ score_breakdown.quiz_score | default(0) }} / 15 pts</span>
+                        </div>
+                        <div class="progress bg-secondary" style="height: 6px;">
+                            <div class="progress-bar bg-primary" role="progressbar" style="width: {{ ((score_breakdown.quiz_score | default(0)) / 15) * 100 }}%;"></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="d-flex justify-content-between text-secondary mb-1" style="font-size: 0.85rem;">
+                            <span><i class="fa-solid fa-award text-primary me-2"></i> Verified Certifications (15% Weight)</span>
+                            <span class="text-light fw-bold">{{ score_breakdown.certs_score | default(0) }} / 15 pts</span>
+                        </div>
+                        <div class="progress bg-secondary" style="height: 6px;">
+                            <div class="progress-bar bg-primary" role="progressbar" style="width: {{ ((score_breakdown.certs_score | default(0)) / 15) * 100 }}%;"></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="d-flex justify-content-between text-secondary mb-1" style="font-size: 0.85rem;">
+                            <span><i class="fa-solid fa-file-invoice text-primary me-2"></i> Portfolio & Resume Completeness (20% Weight)</span>
+                            <span class="text-light fw-bold">{{ score_breakdown.portfolio_score | default(0) }} / 20 pts</span>
+                        </div>
+                        <div class="progress bg-secondary" style="height: 6px;">
+                            <div class="progress-bar bg-primary" role="progressbar" style="width: {{ ((score_breakdown.portfolio_score | default(0)) / 20) * 100 }}%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" data-aos="fade-up">
+        <div class="col-12">
+            <div class="glass-card">
+                <h5 class="fw-bold mb-4"><i class="fa-solid fa-circle-info text-primary me-2"></i> Interactive Readiness Checklist & Advice</h5>
+
+                <div class="d-flex flex-column gap-3">
+                    {% for check in advice | default([]) %}
+                        <div class="p-3 rounded border border-color bg-transparent d-flex gap-3 align-items-center">
+                            <i class="fa-solid {% if check.status %}fa-circle-check text-success{% else %}fa-circle-xmark text-danger{% endif %} fs-4"></i>
+                            <div>
+                                <h6 class="fw-bold text-light mb-1">{{ check.title | default('Check') }}</h6>
+                                <p class="text-secondary mb-0" style="font-size: 0.85rem;">{{ check.desc | default('') }}</p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

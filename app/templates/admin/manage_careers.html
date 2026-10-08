@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Careers - Administrator - Dream Career Explorer{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Header Hero -->
+    <div class="row mb-4" data-aos="fade-down">
+        <div class="col-12">
+            <div class="glass-card" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, var(--bg-card) 100%);">
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+                    <div>
+                        <span class="badge-custom badge-tech mb-2"><i class="fa-solid fa-briefcase"></i> Job Directory</span>
+                        <h2 class="fw-bold mb-1">Manage Career Profiles</h2>
+                        <p class="text-secondary mb-0">Construct new industry pathways, specify required skills and salary projections, or delete profiles.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Forms and Table columns -->
+    <div class="row g-4">
+        <!-- 1. Add Career Form -->
+        <div class="col-lg-5" data-aos="fade-right">
+            <div class="glass-card">
+                <h5 class="fw-bold mb-4"><i class="fa-solid fa-square-plus text-primary me-2"></i> Register New Career Pathway</h5>
+                
+                <form action="{{ url_for('admin.manage_careers') }}" method="POST">
+                    <div class="mb-3">
+                        <label class="form-label text-secondary" style="font-size: 0.9rem;">Career Title</label>
+                        <input type="text" name="title" class="form-control-custom" placeholder="e.g. AI Product Designer" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label text-secondary" style="font-size: 0.9rem;">Overview / Description</label>
+                        <textarea name="overview" class="form-control-custom" rows="3" placeholder="Core focus and summary of this role..." required></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label text-secondary" style="font-size: 0.9rem;">Key Responsibilities</label>
+                        <textarea name="responsibilities" class="form-control-custom" rows="3" placeholder="What does this role do on a daily basis..."></textarea>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-secondary" style="font-size: 0.9rem;">Avg Salary (IN)</label>
+                            <input type="text" name="average_salary_in" class="form-control-custom" placeholder="e.g. ₹1,200,000">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-secondary" style="font-size: 0.9rem;">Avg Salary (Global)</label>
+                            <input type="text" name="average_salary_intl" class="form-control-custom" placeholder="e.g. $110,000">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-secondary" style="font-size: 0.9rem;">Growth Forecast Rate</label>
+                            <input type="text" name="growth_rate" class="form-control-custom" placeholder="e.g. 24%">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-secondary" style="font-size: 0.9rem;">Future Scope Type</label>
+                            <input type="text" name="future_scope" class="form-control-custom" placeholder="e.g. Exponential Growth">
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label text-secondary" style="font-size: 0.9rem;">Hiring Companies (Comma separated)</label>
+                        <input type="text" name="top_companies" class="form-control-custom" placeholder="e.g. Google, Apple, Microsoft">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label text-secondary" style="font-size: 0.9rem;">Required Certs (Semicolon separated)</label>
+                        <input type="text" name="required_certifications" class="form-control-custom" placeholder="AWS Certified Associate; GCP Architect">
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label text-secondary" style="font-size: 0.9rem;">Required Degrees (Semicolon separated)</label>
+                        <input type="text" name="required_degrees" class="form-control-custom" placeholder="B.Tech (CS); Bachelor of Design">
+                    </div>
+
+                    <button type="submit" class="glow-btn w-100 py-3"><i class="fa-solid fa-plus-circle"></i> Create Career Profile</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- 2. Career List tracker -->
+        <div class="col-lg-7" data-aos="fade-left">
+            <div class="glass-card h-100">
+                <h5 class="fw-bold mb-4"><i class="fa-solid fa-list-check text-primary me-2"></i> Current Career Directory</h5>
+                
+                <div class="d-flex flex-column gap-3" style="max-height: 800px; overflow-y: auto;">
+                    {% for c in careers %}
+                        <div class="p-3 rounded border border-color bg-transparent d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="fw-bold text-light mb-1">{{ c.title }}</h6>
+                                <span class="text-secondary" style="font-size: 0.8rem;">
+                                    Salary (IN): <strong>{{ c.average_salary_in }}</strong> &bull; Growth: <strong>{{ c.growth_rate }}</strong>
+                                </span>
+                            </div>
+                            <!-- Delete form -->
+                            <form action="{{ url_for('admin.delete_career', career_id=c.id) }}" method="POST" class="m-0" onsubmit="return confirm('Are you sure you want to delete this career pathway? This will clear related roadmap and course associations.');">
+                                <button type="submit" class="btn btn-outline-danger btn-sm border-color" title="Delete Career">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </button>
+                            </form>
+                        </div>
+                    {% else %}
+                        <p class="text-muted text-center py-4">No careers added yet.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

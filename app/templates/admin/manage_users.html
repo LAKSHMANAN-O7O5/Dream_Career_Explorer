@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Students - Administrator - Dream Career Explorer{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Header Hero -->
+    <div class="row mb-4" data-aos="fade-down">
+        <div class="col-12">
+            <div class="glass-card" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, var(--bg-card) 100%);">
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+                    <div>
+                        <span class="badge-custom badge-tech mb-2"><i class="fa-solid fa-users"></i> Student Registry</span>
+                        <h2 class="fw-bold mb-1">Manage Students</h2>
+                        <p class="text-secondary mb-0">Oversee active student profiles, check qualifications, and revoke user access if necessary.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Students Registry Table -->
+    <div class="row" data-aos="fade-up">
+        <div class="col-12">
+            <div class="glass-card p-0 overflow-hidden">
+                <div class="table-responsive">
+                    <table class="table table-dark table-striped table-hover border-color mb-0 align-middle">
+                        <thead>
+                            <tr style="border-bottom: 2px solid var(--border-color);">
+                                <th scope="col" class="ps-4 py-3 text-secondary">STUDENT NAME</th>
+                                <th scope="col" class="py-3 text-secondary">EMAIL</th>
+                                <th scope="col" class="py-3 text-secondary">DEPARTMENT</th>
+                                <th scope="col" class="py-3 text-secondary">QUALIFICATION</th>
+                                <th scope="col" class="py-3 text-secondary">DATE JOINED</th>
+                                <th scope="col" class="py-3 text-secondary text-center">ACTIONS</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for s in students %}
+                                <tr>
+                                    <td class="ps-4">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <img src="{{ url_for('static', filename='uploads/' + s.profile_pic) }}" alt="Avatar" width="32" height="32" class="rounded-circle border border-secondary" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3135/3135715.png';">
+                                            <div>
+                                                <span class="text-light fw-bold">{{ s.full_name }}</span>
+                                                <div class="text-muted" style="font-size: 0.75rem;">@{{ s.username }}</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="text-secondary" style="font-size: 0.9rem;">{{ s.email }}</td>
+                                    <td class="text-secondary" style="font-size: 0.9rem;">{{ s.department or 'Not Specified' }}</td>
+                                    <td class="text-secondary" style="font-size: 0.9rem;">{{ s.qualification or 'Not Specified' }}</td>
+                                    <td class="text-secondary" style="font-size: 0.85rem;">{{ s.created_at.strftime('%d %b %Y') }}</td>
+                                    <td class="text-center">
+                                        <!-- Delete Trigger Form -->
+                                        <form action="{{ url_for('admin.delete_student', student_id=s.id) }}" method="POST" class="m-0 d-inline-block" onsubmit="return confirm('Are you absolutely sure you want to delete this student account? This action is irreversible!');">
+                                            <button type="submit" class="btn btn-outline-danger btn-sm border-color" title="Delete User">
+                                                <i class="fa-solid fa-trash-can"></i> Delete
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="6" class="text-center text-muted py-5">No registered students found.</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

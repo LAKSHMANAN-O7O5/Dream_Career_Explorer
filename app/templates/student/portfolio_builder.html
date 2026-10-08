@@ -1,0 +1,180 @@
+{% extends "base.html" %}
+
+{% block title %}My Portfolio - Dream Career Explorer{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Header Hero -->
+    <div class="row mb-4" data-aos="fade-down">
+        <div class="col-12">
+            <div class="glass-card" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, var(--bg-card) 100%);">
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+                    <div>
+                        <span class="badge-custom badge-tech mb-2"><i class="fa-solid fa-briefcase"></i> Portfolio Hub</span>
+                        <h2 class="fw-bold mb-1">Professional Portfolio Builder</h2>
+                        <p class="text-secondary mb-0">Construct your technical identity, log projects, and register skill domains.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Forms Sections -->
+    <div class="row g-4">
+        
+        <!-- Left Column: Core Bio & Profiles -->
+        <div class="col-lg-6" data-aos="fade-right">
+            <div class="glass-card">
+                <h5 class="fw-bold mb-4"><i class="fa-solid fa-user-pen text-primary me-2"></i> Professional Biography & Profiles</h5>
+                
+                <form action="{{ url_for('student.portfolio') }}" method="POST">
+                    <div class="mb-3">
+                        <label class="form-label text-secondary" style="font-size: 0.9rem;">Professional Biography (Bio)</label>
+                        <textarea name="bio" class="form-control-custom" rows="3" placeholder="Tell recruiters about yourself, passion, and career focus...">{{ portfolio.bio or '' }}</textarea>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-secondary" style="font-size: 0.9rem;">GitHub Profile Link</label>
+                            <input type="url" name="github_profile" class="form-control-custom" placeholder="https://github.com/username" value="{{ portfolio.github_profile or '' }}">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-secondary" style="font-size: 0.9rem;">LinkedIn Profile Link</label>
+                            <input type="url" name="linkedin_profile" class="form-control-custom" placeholder="https://linkedin.com/in/username" value="{{ portfolio.linkedin_profile or '' }}">
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label text-secondary" style="font-size: 0.9rem;">Personal Website / Portfolio Link</label>
+                        <input type="url" name="website" class="form-control-custom" placeholder="https://mywebsite.com" value="{{ portfolio.website or '' }}">
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label text-secondary" style="font-size: 0.9rem;">Academic Achievements / Awards</label>
+                        <textarea name="achievements" class="form-control-custom" rows="3" placeholder="List certifications, hackathon awards, scholarship titles...">{{ portfolio.achievements or '' }}</textarea>
+                    </div>
+
+                    <button type="submit" class="glow-btn px-4 py-3"><i class="fa-solid fa-floppy-disk"></i> Update Portfolio Bio</button>
+                </form>
+            </div>
+            
+            <!-- Skills Inventory -->
+            <div class="glass-card mt-4">
+                <h5 class="fw-bold mb-4"><i class="fa-solid fa-square-check text-primary me-2"></i> Register Skills Inventory</h5>
+                
+                <form action="{{ url_for('student.portfolio') }}" method="POST" class="mb-4 border-bottom border-color pb-3">
+                    <div class="row align-items-end g-3">
+                        <div class="col-md-6">
+                            <label class="form-label text-secondary" style="font-size: 0.9rem;">Skill Name</label>
+                            <input type="text" name="new_skill" class="form-control-custom" placeholder="e.g. Python, Docker, Figma" required>
+                        </div>
+                        <div class="col-md-4">
+    <label class="form-label text-secondary" style="font-size: 0.9rem;">
+        Proficiency (1-100%)
+    </label>
+
+    <input type="range"
+           id="skillSlider"
+           name="new_proficiency"
+           class="form-range"
+           min="10"
+           max="100"
+           value="50">
+
+    <div class="mt-2">
+        <span id="skillValue" class="badge bg-primary">70%</span>
+    </div>
+</div>
+                        <div class="col-md-2">
+                            <button type="submit" class="glow-btn w-100 p-2"><i class="fa-solid fa-plus"></i></button>
+                        </div>
+                    </div>
+                </form>
+
+                <h6 class="text-secondary fw-semibold mb-3" style="font-size: 0.8rem; letter-spacing: 1px;">MY CURRENT SKILLS</h6>
+                <div class="d-flex flex-column gap-2">
+                    {% for sk in skills %}
+                        <div class="p-2 rounded border border-color bg-transparent d-flex justify-content-between align-items-center">
+                            <div>
+                                <span class="text-light fw-medium">{{ sk.skill_name }}</span>
+                                <span class="badge bg-primary ms-2">{{ sk.proficiency }}%</span>
+                            </div>
+                            <form action="{{ url_for('student.delete_skill', skill_id=sk.id) }}" method="POST" class="m-0">
+                                <button type="submit" class="btn btn-link text-danger p-0" title="Delete Skill"><i class="fa-solid fa-trash-can"></i></button>
+                            </form>
+                        </div>
+                    {% else %}
+                        <p class="text-unmuted text-center py-3">No skills registered yet.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: Projects list -->
+        <div class="col-lg-6" data-aos="fade-left">
+            <div class="glass-card">
+                <h5 class="fw-bold mb-4"><i class="fa-solid fa-code-fork text-primary me-2"></i> Capstone Projects Manager</h5>
+                
+                <!-- Add Project Form -->
+                <form action="{{ url_for('student.add_project') }}" method="POST" class="mb-4 pb-3 border-bottom border-color">
+                    <div class="mb-3">
+                        <label class="form-label text-secondary" style="font-size: 0.9rem;">Project Title</label>
+                        <input type="text" name="title" class="form-control-custom" placeholder="e.g. AI-Powered Chat System" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-secondary" style="font-size: 0.9rem;">Tools Used (Comma-separated)</label>
+                        <input type="text" name="tools_used" class="form-control-custom" placeholder="e.g. Python, Flask, SQLite, JS">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-secondary" style="font-size: 0.9rem;">Project Description</label>
+                        <textarea name="description" class="form-control-custom" rows="3" placeholder="Briefly detail problem statement, approach, and highlights..." required></textarea>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-secondary" style="font-size: 0.9rem;">GitHub Link</label>
+                            <input type="url" name="github_link" class="form-control-custom" placeholder="https://github.com/mycode">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-secondary" style="font-size: 0.9rem;">Live Deployment Link</label>
+                            <input type="url" name="live_link" class="form-control-custom" placeholder="https://myapp.vercel.app">
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="glow-btn px-4 py-3"><i class="fa-solid fa-plus"></i> Add Project</button>
+                </form>
+
+                <h6 class="text-secondary fw-semibold mb-3" style="font-size: 0.8rem; letter-spacing: 1px;">REGISTERED PROJECTS</h6>
+                <div class="d-flex flex-column gap-3">
+                    {% for proj in projects %}
+                        <div class="p-3 rounded border border-color bg-transparent">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <div>
+                                    <h6 class="fw-bold text-light mb-1">{{ proj.title }}</h6>
+                                    {% if proj.tools_used %}
+                                        <span class="badge-custom badge-tech" style="font-size: 0.65rem;">{{ proj.tools_used }}</span>
+                                    {% endif %}
+                                </div>
+                                <form action="{{ url_for('student.delete_project', project_id=proj.id) }}" method="POST" class="m-0">
+                                    <button type="submit" class="btn btn-link text-danger p-0" title="Delete Project"><i class="fa-solid fa-trash-can"></i></button>
+                                </form>
+                            </div>
+                            <p class="text-secondary mb-2" style="font-size: 0.85rem;">{{ proj.description }}</p>
+                            <div class="d-flex gap-3" style="font-size: 0.8rem;">
+                                {% if proj.github_link %}
+                                    <a href="{{ proj.github_link }}" target="_blank" class="text-unmuted"><i class="fa-brands fa-github"></i> Repository</a>
+                                {% endif %}
+                                {% if proj.live_link %}
+                                    <a href="{{ proj.live_link }}" target="_blank" class="text-unmuted"><i class="fa-solid fa-arrow-up-right-from-square"></i> Live Site</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% else %}
+                        <p class="text-unmuted text-center py-3">No projects registered yet.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
